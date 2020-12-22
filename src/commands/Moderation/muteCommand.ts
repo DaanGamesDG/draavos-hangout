@@ -44,7 +44,6 @@ export default class muteCommand extends BaseCommand {
       .catch(e => DMed = false);
     };
 
-    //to do: add to db for ready event
     const schema = await new muteSchema({ guildId: message.guild.id, moderator: message.author.id, id: member.id, endDate: Date.now() + duration, duration }).save()
       .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, mongodb threw an exception: \`${e}\`.`) });
 
