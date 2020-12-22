@@ -2,6 +2,7 @@ import BaseEvent from '../../utils/structures/BaseEvent';
 import DiscordClient from '../../client/client';
 import { modlog } from "../../../config";
 import { Guild, MessageEmbed, TextChannel, User } from 'discord.js';
+import { tempbanSchema } from '../../utils/database/tempban';
 export default class MessageEvent extends BaseEvent {
   constructor() {
     super("guildBanRemove");
@@ -37,5 +38,8 @@ export default class MessageEvent extends BaseEvent {
       ]);
 
     channel.send(embed);
+
+    const ban = await tempbanSchema.findOne({ id: user.id });
+    if (ban) ban.delete();
   }
 }

@@ -46,12 +46,12 @@ export default class MessageEvent extends BaseEvent {
         m.delete();
       } else {
         setTimeout(async () => {
-          const moderator = client.users.cache.get(m.get("moderator")) || await client.users.fetch(m.get("moderator"));
-          const member = await (guild.members.cache.get(m.get("id")) || await guild.members.fetch(m.get("id")))
-            .roles.remove(muteRole, `${m.get("moderator")}|automatic unmute from mute made ${ms(m.get("duration") as number)} ago by ${moderator.tag}`);
-
-          client.emit("muteEvent", "unmute", member, moderator, `automatic unmute from mute made ${ms(m.get("duration") as number)} ago by ${moderator.tag}`);
           m.delete();
+          const moderator = client.users.cache.get(m.get("moderator")) || await client.users.fetch(m.get("moderator"));
+          const member = (guild.members.cache.get(m.get("id")) || await guild.members.fetch(m.get("id")))
+          if (member) member.roles.remove(muteRole, `${m.get("moderator")}|automatic unmute from mute made ${ms(m.get("duration") as number)} ago by ${moderator.tag}`)
+
+          client.emit("muteEvent", "unmute", member ? member : m.get("id"), moderator, `automatic unmute from mute made ${ms(m.get("duration") as number)} ago by ${moderator.tag}`);
         }, duration);
       };
     });

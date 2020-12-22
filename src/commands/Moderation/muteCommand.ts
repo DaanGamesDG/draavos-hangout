@@ -53,9 +53,10 @@ export default class muteCommand extends BaseCommand {
     client.emit("muteEvent", "mute", member, message.author, reason, duration);
     
     setTimeout(() => {
-      member.roles.remove(muteRole, `${message.author.id}|automatic unmute from mute made ${ms(duration)} ago by ${message.author.tag}`)
-        .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, Discord threw an exception: \`${e}\`.`) })
       schema.delete();
+      if (member) member.roles.remove(muteRole, `${message.author.id}|automatic unmute from mute made ${ms(duration)} ago by ${message.author.tag}`)
+        .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, Discord threw an exception: \`${e}\`.`) })
+
       client.emit("muteEvent", "unmute", member, message.author, `automatic unmute from mute made ${ms(duration)} ago by ${message.author.tag}`);
     }, duration);
 
