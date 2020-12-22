@@ -16,6 +16,7 @@ export default class MessageEvent extends BaseEvent {
   async run(client: DiscordClient, member: GuildMember) {
     const channel = (member.guild.channels.cache.get(systemLog) || client.channels.fetch(systemLog)) as TextChannel;
 
+    const msg = await channel.send(`> ${client.utils.EmojiFinder("loading").toString()} | Checking **${member.user.tag}**, do **not** kick this user.`);
     const acc1 = await (await fetch(baseURL1 + member.id)).json();
     const acc2 = await (await fetch(baseURL2 + member.id)).json();
     let kicked: boolean = false;
@@ -63,6 +64,6 @@ export default class MessageEvent extends BaseEvent {
       ]);
     }
 
-    channel.send(embed);
+    msg.edit("", embed);
   }
 }
