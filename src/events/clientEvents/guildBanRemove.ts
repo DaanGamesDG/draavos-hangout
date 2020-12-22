@@ -10,7 +10,7 @@ export default class MessageEvent extends BaseEvent {
   async run(client: DiscordClient, guild: Guild, user: User) {
     const unban = (await guild.fetchAuditLogs({
       type: "MEMBER_BAN_REMOVE",
-      limit: 1,
+      limit: 50,
     })).entries.find(v => 
       v.target === user 
       && v.target.id === user.id
