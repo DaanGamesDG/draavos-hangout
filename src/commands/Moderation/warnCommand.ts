@@ -50,7 +50,7 @@ export default class warnCommand extends BaseCommand {
       .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, mongodb threw an exception: \`${e}\`.`) });
 
     
-    client.emit("warnEvent", member, message.author, reason);
+    client.emit("warnEvent", member, message.author, caseId, reason);
     return message.channel.send(`> 🧾 | Successfully warned **${member.user.tag}** for **${reason}**. Case id: \`${caseId}\`. ${DMed ? "" : "\n > ℹ | **I couldn't DM this user**"}`, { split: true });
   }
 }
