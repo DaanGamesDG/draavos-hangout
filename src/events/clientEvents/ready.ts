@@ -17,6 +17,9 @@ export default class MessageEvent extends BaseEvent {
     console.log(`${client.user.tag} has logged in!`);
     //this.videoAnnouncement(client);
 
+
+
+    // tempban continue
     (await tempbanSchema.find()).forEach(b => {
       const duration = (b.get("endDate") as number) - Date.now();
       const guild = client.guilds.cache.get(b.get("guildId"));
@@ -33,6 +36,8 @@ export default class MessageEvent extends BaseEvent {
       };
     });
 
+
+    // mute continue
     (await muteSchema.find()).forEach(async m => {
       const duration = (m.get("endDate") as number) - Date.now();
       const guild = client.guilds.cache.get(m.get("guildId"));

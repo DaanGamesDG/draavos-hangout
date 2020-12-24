@@ -1,11 +1,12 @@
 import BaseEvent from '../../../utils/structures/BaseEvent';
 import DiscordClient from '../../../client/client';
-import { systemLog } from "../../../../config";
+import { muteRole, systemLog } from "../../../../config";
 import { ClientVoiceManager, GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from "node-fetch";
 import moment from 'moment';
 import { tempbanSchema } from '../../../utils/database/tempban';
 import ms from 'ms';
+import { muteSchema } from '../../../utils/database/mute';
 
 const baseURL1 = "https://verify.eryn.io/api/user/";
 const baseURL2 = "https://api.blox.link/v1/user/";
@@ -88,5 +89,29 @@ export default class MessageEvent extends BaseEvent {
     }
 
     msg.edit("", embed);
+
+    const data = await muteSchema.findOne({ id: member.id, guildId: member.guild.id });
+    if (!data) return;
+
+    const duration = (data.get("endDate") as number) - Date.now();
+    const guild = client.guilds.cache.get(data.get("guildId"));
+
+    if (duration <= 0) {
+      const moderator = client.users.cache.get(data.get("moderator")) || await client.users.fetch(data.get("moderator"));
+      const member = await (guild.members.cache.get(data.get("id")) || await guild.members.fetch(data.get("id")))
+        .roles.remove(muteRole, `${data.get("moderator")}|automatic unmute from mute made ${ms(data.get("duration") as number)} ago by ${moderator.tag}`);
+
+      client.emit("muteEvent", "unmute", member, moderator, `automatic unmute from made ${ms(data.get("duration") as number)} ago by ${moderator.tag}`);
+      data.delete();
+    } else {
+      setTimeout(async () => {
+        data.delete();
+        const moderator = client.users.cache.get(data.get("moderator")) || await client.users.fetch(data.get("moderator"));
+        const member = (guild.members.cache.get(data.get("id")) || await guild.members.fetch(data.get("id")))
+        if (member) member.roles.remove(muteRole, `${data.get("moderator")}|automatic unmute from mute made ${ms(data.get("duration") as number)} ago by ${moderator.tag}`)
+
+        client.emit("muteEvent", "unmute", member ? member : data.get("id"), moderator, `automatic unmute from mute made ${ms(data.get("duration") as number)} ago by ${moderator.tag}`);
+      }, duration);
+    };
   }
 }
