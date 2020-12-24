@@ -2,8 +2,6 @@ import DiscordClient from "../../client/client";
 import BaseCommand from "../../utils/structures/baseCommand";
 import { warnSchema } from "../../utils/database/warn";
 import { GuildMember, Message } from "discord.js";
-import { muteRole } from "../../../config";
-import ms from "ms";
 
 export default class warnCommand extends BaseCommand {
   constructor() {
@@ -51,8 +49,6 @@ export default class warnCommand extends BaseCommand {
     }).save()
       .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, mongodb threw an exception: \`${e}\`.`) });
 
-    await member.roles.add(muteRole, `${message.author.id}|${reason}`)
-      .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, Discord threw an exception: \`${e}\`.`) });
     
     client.emit("warnEvent", member, message.author, reason);
     return message.channel.send(`> 🧾 | Successfully warned **${member.user.tag}** for **${reason}**. Case id: \`${caseId}\`. ${DMed ? "" : "\n > ℹ | **I couldn't DM this user**"}`, { split: true });
