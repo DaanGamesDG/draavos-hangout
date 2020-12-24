@@ -20,15 +20,15 @@ export default class MessageEvent extends BaseEvent {
     const channel = (member.guild.channels.cache.get(systemLog) || client.channels.fetch(systemLog)) as TextChannel;
 
     const msg = await channel.send(`> ${client.utils.EmojiFinder("loading").toString()} | Checking **${member.user.tag}**, do **not** kick this user.`);
-    const acc1 = await (await fetch(baseURL1 + member.id)).json();
+    //const acc1 = await (await fetch(baseURL1 + member.id)).json();
     const acc2 = await (await fetch(baseURL2 + member.id)).json();
     let kicked: boolean = false;
 
     if (
-      (acc1.status === "error", acc1.errorCode === 404) 
-      && (acc2.error === "This user is not linked with Bloxlink.", acc2.status == "error")
+      //(acc1.status === "error", acc1.errorCode === 404) &&
+      (acc2.error === "This user is not linked with Bloxlink.", acc2.status == "error")
       &&  (Date.now() - member.user.createdTimestamp) < 1296e6
-      //&& !member.user.bot
+      && !member.user.bot
     ) {
       const joins = invalidJoins.get(member.id) || invalidJoins.set(member.id, 1).get(member.id);
       if (joins > 2) {
@@ -61,7 +61,7 @@ export default class MessageEvent extends BaseEvent {
     };
 
     const creationDate = `${moment(member.user.createdTimestamp).format('LT')} ${moment(member.user.createdTimestamp).format('LL')} | ${moment(member.user.createdTimestamp).fromNow()}`;
-    const bool = acc1.status !== "error" ? client.utils.EmojiFinder("greentick").toString() : acc2.status !== "error" ? client.utils.EmojiFinder("greentick").toString() : client.utils.EmojiFinder("redtick").toString();
+    const bool = acc2.status !== "error" ? client.utils.EmojiFinder("greentick").toString() : client.utils.EmojiFinder("redtick").toString();
     
     const embed = new MessageEmbed()
 
