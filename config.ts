@@ -19,5 +19,5 @@ export const ytIdS: string = "";
 export const ytTokenS: string = "";
 
 // message log webhook
-export const msgLogId: string = "";
-export const msgLogToken: string = "";
+export const msgLogId: string = "791646258515148801";
+export const msgLogToken: string = "fMnLDIjZT-BgWUDnxySPS1nHtS2pfgonKSTzeAfO1XPPcXxZmE1GafBMyDeBPUmN4QBB";
