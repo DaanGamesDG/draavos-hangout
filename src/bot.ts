@@ -15,6 +15,7 @@ const client = new DiscordClient(
   {
     disableMentions: "everyone",
     messageCacheLifetime: 864e5 * 7,
+    partials: ["CHANNEL", "MESSAGE", "GUILD_MEMBER", "USER", "REACTION"],
   },
 );
 
