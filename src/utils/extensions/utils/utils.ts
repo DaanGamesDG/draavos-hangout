@@ -1,4 +1,4 @@
-import { GuildMember, NewsChannel, TextChannel, GuildEmoji, PermissionString, Message } from 'discord.js';
+import { GuildMember, NewsChannel, TextChannel, GuildEmoji, PermissionString, Message, MessageAttachment, Collection } from 'discord.js';
 import DiscordClient from '../../../client/client';
 
 export default class Util {
@@ -105,14 +105,13 @@ export default class Util {
     .replace(/ove/g, "uv");
   };
 
-  public tagScriptGuildMember(message: String, member: GuildMember): string {
-    const guild = member.guild;
+  public getAttachments(attachments: Collection<string, MessageAttachment>): string[] {
+    const valid = /^.*(gif|png|jpg|jpeg|mp4|mp3|pdf|psd)$/g
 
-    return message
-    .replace(/{server.name}/g, guild.name)
-    .replace(/{user.tag}/g, member.user.tag)
-    .replace(/{user.avatar}/g, member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
-  };
+    return attachments.array()
+      .filter(attachment => valid.test(attachment.url))
+      .map(attachment => attachment.url);
+  }
 
   private check (suffix: string): string {
     let thing: string;

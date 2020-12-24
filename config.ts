@@ -17,3 +17,7 @@ export const ytToken: string = "";
 // yt-webhook-senior
 export const ytIdS: string = "";
 export const ytTokenS: string = "";
+
+// message log webhook
+export const msgLogId: string = "";
+export const msgLogToken: string = "";

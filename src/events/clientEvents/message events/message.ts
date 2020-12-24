@@ -1,6 +1,6 @@
 import { Message, NewsChannel, TextChannel } from 'discord.js';
-import BaseEvent from '../../utils/structures/BaseEvent';
-import DiscordClient from '../../client/client';
+import BaseEvent from '../../../utils/structures/BaseEvent';
+import DiscordClient from '../../../client/client';
 import ms from 'ms';
 
 const timeouts: Map<string, number> = new Map();

@@ -1,6 +1,6 @@
-import BaseEvent from '../../utils/structures/BaseEvent';
-import DiscordClient from '../../client/client';
-import { modlog } from "../../../config";
+import BaseEvent from '../../../utils/structures/BaseEvent';
+import DiscordClient from '../../../client/client';
+import { modlog } from "../../../../config";
 import { GuildMember, MessageEmbed, TextChannel, User } from 'discord.js';
 import ms from "ms";
 

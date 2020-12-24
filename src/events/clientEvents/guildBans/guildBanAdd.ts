@@ -1,7 +1,7 @@
-import BaseEvent from '../../utils/structures/BaseEvent';
-import DiscordClient from '../../client/client';
-import { tempbanSchema } from "../../utils/database/tempban";
-import { modlog } from "../../../config";
+import BaseEvent from '../../../utils/structures/BaseEvent';
+import DiscordClient from '../../../client/client';
+import { tempbanSchema } from "../../../utils/database/tempban";
+import { modlog } from "../../../../config";
 import { Guild, MessageEmbed, TextChannel, User } from 'discord.js';
 import ms from "ms";
 

@@ -1,10 +1,10 @@
-import BaseEvent from '../../utils/structures/BaseEvent';
-import DiscordClient from '../../client/client';
-import { systemLog } from "../../../config";
+import BaseEvent from '../../../utils/structures/BaseEvent';
+import DiscordClient from '../../../client/client';
+import { systemLog } from "../../../../config";
 import { ClientVoiceManager, GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from "node-fetch";
 import moment from 'moment';
-import { tempbanSchema } from '../../utils/database/tempban';
+import { tempbanSchema } from '../../../utils/database/tempban';
 import ms from 'ms';
 
 const baseURL1 = "https://verify.eryn.io/api/user/";
