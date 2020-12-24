@@ -5,6 +5,7 @@ import { muteSchema } from "../../utils/database/mute";
 import Parser from "rss-parser";
 import ms from "ms";
 import { muteRole } from '../../../config';
+import fetch from 'node-fetch';
 
 const parser = new Parser();
 
@@ -17,7 +18,7 @@ export default class MessageEvent extends BaseEvent {
     console.log(`${client.user.tag} has logged in!`);
     //this.videoAnnouncement(client);
 
-
+    this.status(client);
 
     // tempban continue
     (await tempbanSchema.find()).forEach(b => {
@@ -62,8 +63,17 @@ export default class MessageEvent extends BaseEvent {
     });
   }
 
-  async videoAnnouncement(client: DiscordClient) {
-    const url: string = "https://www.youtube.com/feeds/videos.xml?channel_id=UCkMrp3dJhWz2FcGTzywQGWg";
-    console.log(await parser.parseURL(url));
+  async status(client: DiscordClient) {
+    const url: string = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=UCkMrp3dJhWz2FcGTzywQGWg&key=" + process.env.YOUTUBE_API_KEY;
+
+    const data = await (await fetch(url)).json();
+    const subCount = data.items[0].statistics.subscriberCount;
+    client.user.setActivity(`with ${subCount} subscribers!`, { type: "PLAYING" });
+
+    setTimeout(async () => {
+      const data = await (await fetch(url)).json();
+      const subCount = data.items[0].statistics.subscriberCount;
+      client.user.setActivity(`with ${subCount} subscribers!`, { type: "PLAYING" });
+    }, 6e4);
   }
 }
