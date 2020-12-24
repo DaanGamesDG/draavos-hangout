@@ -43,7 +43,7 @@ export default class warnCommand extends BaseCommand {
       id: member.id,
       guildId: message.guild.id,
       moderator: message.author.id,
-      reason,
+      reason: reason,
       case: caseId,
       date: Date.now(),
     }).save()

@@ -55,6 +55,7 @@ export default class DiscordClient extends Client {
   get commands(): Collection<string, BaseCommand> { return this._commands; }
   get cs(): Collection<string, BaseCommand> { return this._cs; }
   get events(): Collection<string, BaseEvent> { return this._events; }
+  get prefix(): string { return process.env.DISCORD_BOT_PREFIX; }
 
   // private functions
   private async loadCommands(dir: string = this.commandsDir): Promise<void> {

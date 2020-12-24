@@ -1,16 +1,16 @@
 import DiscordClient from "../../client/client";
 import BaseCommand from "../../utils/structures/baseCommand";
 import { warnSchema } from "../../utils/database/warn";
-import { GuildMember, Message } from "discord.js";
+import { Message } from "discord.js";
 
 export default class warnCommand extends BaseCommand {
   constructor() {
     super("removewarn", {
       category: "Moderation", 
-      aliases: [],
+      aliases: ["removewarnings"],
       ownerOnly: false,
       channelType: "guild",
-      description: "warn someone, really simple I think.",
+      description: "Removes a warning from someone using the case ids.",
       usage: "<case id>",
       userPermissions: ["MANAGE_MESSAGES"],
       timeout: 1e3,
@@ -24,7 +24,7 @@ export default class warnCommand extends BaseCommand {
     const data = await warnSchema.findOne({ case: caseId, guildId: message.guild.id });
     if (!data) return message.channel.send(`> ${redtick} | I didn't find a case with the id "${caseId}".`);
     if (data.get("id") === message.author.id && message.member.permissions.missing("MANAGE_GUILD"))
-      return message.channel.send(`> | You can not remove your own warning unless you have the \`Manage Server\` permission!`);
+      return message.channel.send(`> ${redtick} | You can not remove your own warning unless you have the \`Manage Server\` permission!`);
 
     data.delete()
     .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, mongodb threw an exception: \`${e}\`.`) });
