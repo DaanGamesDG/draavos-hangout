@@ -35,6 +35,6 @@ export default class banCommand extends BaseCommand {
     await message.guild.members.unban(user, `${message.author.id}|${reason}`)
       .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, Discord threw an exception: \`${e}\`.`) });
 
-    return message.channel.send(`> 🔨 | Successfully unbanned **${user.tag}** for **${reason}**.`, { split: true });
+    return message.channel.send(`> 🔨 | Successfully unbanned **${user.tag}**, reason: **${reason}**.`, { split: true });
   }
 }
