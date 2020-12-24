@@ -1,4 +1,11 @@
-import { channelIds, DraavoMsg, seniorTeamMsg, ytId, ytToken, ytIdS , ytTokenS } from "../../../config";
+import { 
+  channelIds, 
+  DraavoMsg, 
+  seniorTeamMsg, 
+  ytId, ytToken, 
+  ytIdS , 
+  ytTokenS 
+} from "../../../config";
 
 // setup notifier
 import YouTubeNotifier from "youtube-notification";
