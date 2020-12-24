@@ -40,7 +40,7 @@ export default class warnCommand extends BaseCommand {
       .catch(e => DMed = false);
     };
     
-    const caseId = `#${(await warnSchema.find({ guildId: message.guild.id })).length}`;
+    const caseId = `#${(await warnSchema.find({ guildId: message.guild.id })).length + 1}`;
     await new warnSchema({   
       id: member.id,
       guildId: message.guild.id,
@@ -55,6 +55,6 @@ export default class warnCommand extends BaseCommand {
       .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, Discord threw an exception: \`${e}\`.`) });
     
     client.emit("warnEvent", member, message.author, reason);
-    return message.channel.send(`> 🧾 | Successfully warned **${member.user.tag}** for **${reason}**. ${DMed ? "" : "\n > ℹ | **I couldn't DM this user**"}`, { split: true });
+    return message.channel.send(`> 🧾 | Successfully warned **${member.user.tag}** for **${reason}**. Case id: \`${caseId}\`. ${DMed ? "" : "\n > ℹ | **I couldn't DM this user**"}`, { split: true });
   }
 }
