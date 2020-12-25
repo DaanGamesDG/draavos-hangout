@@ -1,6 +1,6 @@
 import BaseEvent from '../../../utils/structures/BaseEvent';
 import DiscordClient from '../../../client/client';
-import { muteRole, systemLog } from "../../../../config";
+import { muteRole, systemLog, systemLogPublic } from "../../../../config";
 import { ClientVoiceManager, GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import fetch from "node-fetch";
 import moment from 'moment';
@@ -90,6 +90,8 @@ export default class MessageEvent extends BaseEvent {
 
     msg.edit("", embed);
 
+    this.welcome(client, member);
+
     const data = await muteSchema.findOne({ id: member.id, guildId: member.guild.id });
     if (!data) return;
 
@@ -113,5 +115,16 @@ export default class MessageEvent extends BaseEvent {
         client.emit("muteEvent", "unmute", member ? member : data.get("id"), moderator, `automatic unmute from mute made ${ms(data.get("duration") as number)} ago by ${moderator.tag}`);
       }, duration);
     };
+  }
+
+  async welcome(client: DiscordClient, member: GuildMember) {
+    const channel = (client.channels.cache.get(systemLogPublic) || await client.channels.fetch(systemLogPublic)) as TextChannel;
+    const embed = new MessageEmbed()
+    .setColor("#58DCAE")
+    .setTitle(`Welcome to Draavo's Hangout, ${member.user.tag}`)
+    .setDescription(`There are now **${member.guild.memberCount}** members in this server. Don't forget to say hi!`)
+    .setFooter("The APT has left a message for you: say Hi!", "https://cdn.discordapp.com/avatars/418223863047127050/a_d5eeb432a39f983872ab941f4be958f0.gif?size=4096");
+
+    channel.send(embed);
   }
 }
