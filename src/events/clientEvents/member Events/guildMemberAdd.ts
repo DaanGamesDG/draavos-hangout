@@ -5,8 +5,8 @@ import { ClientVoiceManager, GuildMember, MessageEmbed, TextChannel } from 'disc
 import fetch from "node-fetch";
 import moment from 'moment';
 import { tempbanSchema } from '../../../utils/database/tempban';
-import ms from 'ms';
 import { muteSchema } from '../../../utils/database/mute';
+import ms from 'ms';
 
 const baseURL1 = "https://verify.eryn.io/api/user/";
 const baseURL2 = "https://api.blox.link/v1/user/";

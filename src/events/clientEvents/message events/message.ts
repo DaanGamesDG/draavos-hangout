@@ -52,9 +52,25 @@ function commandHandler(client: DiscordClient, message: Message, cmdName: string
     if (options.ownerOnly && !client.owners.includes(message.author.id)) return message.channel.send(
       `> ❗ | Sorry this is a command intended for owners and developers of \`${client.user.tag}\` only!`
     );
-    if (!message.guild.me.hasPermission('USE_EXTERNAL_EMOJIS') || !channel.permissionsFor(client.user).has('USE_EXTERNAL_EMOJIS')) return message.channel.send(
-      `> ‼ | I am missing the \`Use External Emojis\` Permission, without this permission I can not work in this server!`
-    );
+    
+    if (message.guild) {
+      if (!message.guild.me.hasPermission('USE_EXTERNAL_EMOJIS') || !channel.permissionsFor(client.user).has('USE_EXTERNAL_EMOJIS')) return message.channel.send(
+        `> ‼ | I am missing the \`Use External Emojis\` Permission, without this permission I can not work in this server!`
+      );
+      
+      if (ignoredChannels.includes(message.channel.id)) return message.channel.send(
+        `> ${client.utils.EmojiFinder('redtick').toString()} | You can not trigger this command here, please try to do it in a different channel.`
+      );
+  
+      if (options.clientPermissions && (channel.permissionsFor(client.user).missing(options.clientPermissions).length || message.guild.me.permissions.missing(options.clientPermissions).length)) {
+        const missing = client.utils.missingPerms(message.guild.me, channel, options.clientPermissions);
+        return message.channel.send(`> ${client.utils.EmojiFinder('redtick').toString()} | Oops, It looks like I am missing a few permissions to continue: ${missing}`);
+      };
+      if (options.userPermissions && (channel.permissionsFor(message.member).missing(options.userPermissions).length || message.member.permissions.missing(options.userPermissions).length)) {
+        const missing = client.utils.missingPerms(message.member, channel, options.userPermissions);
+        return message.channel.send(`> ${client.utils.EmojiFinder('redtick').toString()} | Oops, It looks like you are missing a few permissions to continue: ${missing}`);
+      };
+    }
     
     if (options.usage) {
       const required = options.usage.split(/\|/g).filter(str => str.startsWith("<") && str.endsWith(">"));
@@ -62,19 +78,6 @@ function commandHandler(client: DiscordClient, message: Message, cmdName: string
     };
 
     if (client.owners.includes(message.author.id)) return command.run(client, message, cmdArgs);
-
-    if (ignoredChannels.includes(message.channel.id)) return message.channel.send(
-      `> ${client.utils.EmojiFinder('redtick').toString()} | You can not trigger this command here, please try to do it in a different channel.`
-    );
-
-    if (options.clientPermissions && (channel.permissionsFor(client.user).missing(options.clientPermissions).length || message.guild.me.permissions.missing(options.clientPermissions).length)) {
-      const missing = client.utils.missingPerms(message.guild.me, channel, options.clientPermissions);
-      return message.channel.send(`> ${client.utils.EmojiFinder('redtick').toString()} | Oops, It looks like I am missing a few permissions to continue: ${missing}`);
-    };
-    if (options.userPermissions && (channel.permissionsFor(message.member).missing(options.userPermissions).length || message.member.permissions.missing(options.userPermissions).length)) {
-      const missing = client.utils.missingPerms(message.member, channel, options.userPermissions);
-      return message.channel.send(`> ${client.utils.EmojiFinder('redtick').toString()} | Oops, It looks like you are missing a few permissions to continue: ${missing}`);
-    };
 
     if (options.timeout) {
       const timeout = timeouts.get(message.author.id + `-` + command.name);
