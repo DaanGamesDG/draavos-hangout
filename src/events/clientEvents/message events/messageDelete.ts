@@ -14,8 +14,7 @@ export default class muteEvent extends BaseEvent {
     if (message.channel.type === "dm") return;
     await message.channel.fetch(true);
 
-    if (message.author.bot) return;
-    if (message.partial) return;
+    if (message.partial || message.author.bot) return;
 
     const embed = new MessageEmbed()
     .setTimestamp()
