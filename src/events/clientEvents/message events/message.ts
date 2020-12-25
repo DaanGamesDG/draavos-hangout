@@ -1,7 +1,10 @@
-import { Message, NewsChannel, TextChannel } from 'discord.js';
+import { GuildMember, Message, NewsChannel, TextChannel, User } from 'discord.js';
 import BaseEvent from '../../../utils/structures/BaseEvent';
 import DiscordClient from '../../../client/client';
 import ms from 'ms';
+import { blacklisted, whitelisted } from '../../../utils/database/filter';
+import { ignoreBlacklistWord } from '../../../../config';
+import { warnSchema } from '../../../utils/database/warn';
 
 const timeouts: Map<string, number> = new Map();
 
@@ -15,6 +18,14 @@ export default class MessageEvent extends BaseEvent {
 
     const prefix = process.env.DISCORD_BOT_PREFIX;
     const mentionPrefixes: string[] = [`<@${client.user.id}>`, `<@!${client.user.id}>`];
+
+    const filtered = this.filter(message.content);
+    if (
+      filtered 
+      && message.guild 
+      && !message.member.hasPermission("MANAGE_GUILD")
+      && !ignoreBlacklistWord.includes(message.channel.id)
+    ) return this.warn(message.content, `Automatic warning for using a blacklisted word (${filtered})`, message.member, client) && message.delete();
 
     if (message.content.startsWith(prefix)) {
       const [cmdName, ...cmdArgs] = message.content
@@ -40,6 +51,35 @@ export default class MessageEvent extends BaseEvent {
       if (!cmdName) return message.channel.send(`> 🤖 | My prefix for this server is \`${prefix}\`, you can also the mention prefix (ex: ${client.user.toString()} help)`);
       return commandHandler(client, message, cmdName, cmdArgs);
     }
+  }
+
+  filter(str: string) {
+    let blWord: string = null;
+
+    str.split(/\s+/).forEach(word => 
+      blacklisted.forEach(w => blWord = word.includes(w) ? w : blWord)
+    );
+
+    return blWord;
+  }
+
+  async warn(str: string, reason: string, user: GuildMember, client: DiscordClient) {
+    const caseId = `#${(await warnSchema.find({ guildId: user.guild.id })).length + 1}`;
+    await new warnSchema({   
+      id: user.id,
+      guildId: user.guild.id,
+      moderator: client.user.id,
+      reason: reason,
+      case: caseId,
+      date: Date.now(),
+    }).save().catch(e => console.log(e));
+
+    user.send(`> 🧾 | **Automatic warn - Draavo's Hangout**
+      \n> 📃 | Reason: **${reason}**\n\n> ❗ | **This is an automatic warning, the system may not be 100% correct. If I am wrong:** 
+      \n Create a ticket with the topic: \`warn appeal - automatic warning\` and add \`${str}\` to the description.`, { split: true }
+    ).catch(e => null);
+
+    client.emit("warnEvent", user, client.user, caseId, reason);
   }
 }
 
