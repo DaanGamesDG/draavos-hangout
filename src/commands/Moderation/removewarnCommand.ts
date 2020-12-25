@@ -23,7 +23,7 @@ export default class warnCommand extends BaseCommand {
     
     const data = await warnSchema.findOne({ case: caseId, guildId: message.guild.id });
     if (!data) return message.channel.send(`> ${redtick} | I didn't find a case with the id "${caseId}".`);
-    if (data.get("id") === message.author.id && message.member.permissions.missing("MANAGE_GUILD"))
+    if (data.get("id") === message.author.id && !message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true }))
       return message.channel.send(`> ${redtick} | You can not remove your own warning unless you have the \`Manage Server\` permission!`);
 
     data.delete()

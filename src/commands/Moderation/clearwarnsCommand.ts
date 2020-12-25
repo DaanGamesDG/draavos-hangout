@@ -26,7 +26,7 @@ export default class warnCommand extends BaseCommand {
     const data = await warnSchema.find({ guildId: message.guild.id, id: member.id });
     if (!data) return message.channel.send(`> ${redtick} | I didn't find any cases for **${member.user.tag}**.`);
 
-    if (data[0].get("id") === message.author.id && message.member.permissions.missing("MANAGE_GUILD"))
+    if (data[0].get("id") === message.author.id && !message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true }))
       return message.channel.send(`> ${redtick} | You can not remove your own warning unless you have the \`Manage Server\` permission!`);
 
     let error: any;
