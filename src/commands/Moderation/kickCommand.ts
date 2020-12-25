@@ -43,6 +43,7 @@ export default class banCommand extends BaseCommand {
     await member.kick(`${message.author.id}|${reason}`)
       .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, Discord threw an exception: \`${e}\`.`) });
 
+    client.emit("kickEvent", member, message.author, reason);
     return message.channel.send(`> 👞 | Successfully kicked **${member.user.tag}** for **${reason}**. ${DMed ? "" : "\n > ℹ | **I couldn't DM this user**"}`, { split: true });
   }
 }
