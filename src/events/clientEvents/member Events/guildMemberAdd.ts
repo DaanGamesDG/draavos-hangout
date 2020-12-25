@@ -90,7 +90,7 @@ export default class MessageEvent extends BaseEvent {
 
     msg.edit("", embed);
 
-    this.welcome(client, member);
+    if (!member.user.bot) this.welcome(client, member);
 
     const data = await muteSchema.findOne({ id: member.id, guildId: member.guild.id });
     if (!data) return;
