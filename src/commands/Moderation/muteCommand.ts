@@ -52,12 +52,15 @@ export default class muteCommand extends BaseCommand {
     
     client.emit("muteEvent", "mute", member, message.author, reason, duration);
     
-    setTimeout(() => {
-      schema.delete();
+    setTimeout(async () => {
       if (member) member.roles.remove(muteRole, `${message.author.id}|automatic unmute from mute made ${ms(duration)} ago by ${message.author.tag}`)
         .catch(e => { return message.channel.send(`> ${client.utils.EmojiFinder("warning").toString()} | Oops, Discord threw an exception: \`${e}\`.`) })
 
-      client.emit("muteEvent", "unmute", member, message.author, `automatic unmute from mute made ${ms(duration)} ago by ${message.author.tag}`);
+      const mute = await muteSchema.findOne({ guildId: message.guild.id, id: member.id });
+      if (mute) {
+        mute.delete();
+        client.emit("muteEvent", "unmute", member, message.author, `automatic unmute from mute made ${ms(duration)} ago by ${message.author.tag}`);
+      }
     }, duration);
 
     return message.channel.send(`> 🔇 | Successfully muted **${member.user.tag}** for **${reason}**, duration of mute: \`${ms(duration)}\`. ${DMed ? "" : "\n > ℹ | **I couldn't DM this user**"}`, { split: true });
