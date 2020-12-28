@@ -32,6 +32,7 @@ export default class MessageEvent extends BaseEvent {
 				member.user.tag
 			}**, do **not** kick this user.`
 		);
+
 		//const acc1 = await (await fetch(baseURL1 + member.id)).json();
 		const acc2 = await (await fetch(baseURL2 + member.id)).json();
 		let kicked: boolean = false;
