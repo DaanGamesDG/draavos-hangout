@@ -13,7 +13,6 @@ import {
 	Collection,
 } from "discord.js";
 import { Document } from "mongoose";
-import { tempbanSchema } from "../../utils/database/tempban";
 
 export default class warnCommand extends BaseCommand {
 	constructor() {

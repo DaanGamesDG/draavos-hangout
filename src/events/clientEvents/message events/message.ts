@@ -11,7 +11,6 @@ import ms from "ms";
 import { blacklisted, whitelisted } from "../../../utils/database/filter";
 import { ignoreBlacklistWord } from "../../../../config";
 import { warnSchema } from "../../../utils/database/warn";
-import ticktacttoe from "../../../utils/games/tictactoe";
 
 const timeouts: Map<string, number> = new Map();
 

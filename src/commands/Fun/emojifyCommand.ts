@@ -1,20 +1,22 @@
-import { Message } from 'discord.js';
-import BaseCommand from '../../utils/structures/BaseCommand';
-import DiscordClient from '../../client/client';
+import { Message } from "discord.js";
+import BaseCommand from "../../utils/structures/BaseCommand";
+import DiscordClient from "../../client/client";
 
 export default class emojifyCommand extends BaseCommand {
-  constructor() {
-    super("emojify", {
-      category: 'Fun',
-      aliases: [],
-      description: "emojify your text with this command.",
-      usage: "<text>",
-      channelType: "both",
-      ownerOnly: false,
-    });
-  }
+	constructor() {
+		super("emojify", {
+			category: "Fun",
+			aliases: [],
+			description: "emojify your text with this command.",
+			usage: "<text>",
+			channelType: "both",
+			ownerOnly: false,
+		});
+	}
 
-  async run(client: DiscordClient, message: Message, args: Array<string>) {
-    return message.channel.send(`> 🔤 | ${client.utils.emojify(args.join(' '))}`);
-  }
+	async run(client: DiscordClient, message: Message, args: Array<string>) {
+		return message.channel.send(
+			`> 🔤 | ${client.utils.emojify(args.join(" "))}`
+		);
+	}
 }
