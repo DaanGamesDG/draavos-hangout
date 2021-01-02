@@ -13,6 +13,7 @@ import fetch from "node-fetch";
 import YouTubeNotifier from "youtube-notification";
 const domain: string = "https://draavos-hangout.herokuapp.com";
 const notifier = new YouTubeNotifier({
+	middleware: true,
 	hubCallback: `${domain}/yt`,
 	secret: "very_cool_secret",
 });
