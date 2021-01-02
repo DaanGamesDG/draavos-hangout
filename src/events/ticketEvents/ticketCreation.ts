@@ -71,9 +71,10 @@ export default class MessageEvent extends BaseEvent {
 			);
 
 		const first = emojiCollector.first();
+		const claimer = first.users.cache.find((u) => !u.bot);
 		const ticketChannel = await this.createChannel(
 			message.author.id,
-			first.users.cache.find((u) => !u.bot).id,
+			claimer.id,
 			channel.guild
 		);
 
@@ -84,6 +85,9 @@ export default class MessageEvent extends BaseEvent {
 				`> 📋 | **Reason**: ${reason.substr(0, 2000)}`,
 			]);
 		ticketChannel.send(ticketEmbed);
+		dm.send(
+			`> 🔔 | **${claimer.tag}** claimed your ticket, you should receive a response shortly.`
+		).catch((e) => null);
 	}
 
 	async createChannel(id: string, claimer: string, guild: Guild) {
