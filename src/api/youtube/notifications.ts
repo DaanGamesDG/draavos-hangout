@@ -47,6 +47,7 @@ const app = express();
 const server = https.createServer(app);
 
 app.use("/yt", notifier.listener());
+app.get("/", (req, res) => res.sendStatus(200));
 
 server.listen(process.env.PORT, () =>
 	console.log("api online and listening to port " + process.env.PORT)
@@ -74,3 +75,5 @@ function send(message: string, id: string) {
 		? webhook.send(message).catch((e) => console.log(e))
 		: webhookS.send(message).catch((e) => console.log(e));
 }
+
+setTimeout(() => fetch(domain), 1e4);
