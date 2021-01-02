@@ -28,7 +28,7 @@ export default class MessageEvent extends BaseEvent {
 			`<@!${client.user.id}>`,
 		];
 
-		const filtered = this.filter(message.content);
+		const filtered = this.filter(message.content.toLowerCase());
 		if (
 			filtered &&
 			message.guild &&
