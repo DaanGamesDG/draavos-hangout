@@ -1,5 +1,6 @@
 import {
 	Collection,
+	Guild,
 	GuildMember,
 	Message,
 	MessageEmbed,
@@ -10,6 +11,7 @@ import {
 } from "discord.js";
 import BaseEvent from "../../utils/structures/baseEvent";
 import DiscordClient from "../../client/client";
+import moment from "moment";
 
 export default class MessageEvent extends BaseEvent {
 	constructor() {
@@ -45,11 +47,16 @@ export default class MessageEvent extends BaseEvent {
 		const channel =
 			(client.channels.cache.get(process.env.TICKET_LOGS) as TextChannel) ||
 			((await client.channels.fetch(process.env.TICKET_LOGS)) as TextChannel);
-		const embed = new MessageEmbed().setDescription([
-			`> 👤 | **Ticket Owner**: ${message.author.toString()}`,
-			`> 📋 | **Reason**: ${reason.substr(0, 2000)}`,
-			"\nReact with `✔` to claim this ticket.",
-		]);
+		const embed = new MessageEmbed()
+			.setColor("#9295F8")
+			.setTitle(
+				`New ticket - ${moment(Date.now()).format("MM Do YYYY hh:mm:ss")}`
+			)
+			.setDescription([
+				`> 👤 | **Ticket Owner**: ${message.author.toString()}`,
+				`> 📋 | **Reason**: ${reason.substr(0, 2000)}`,
+				"\nReact with `✔` to claim this ticket.",
+			]);
 
 		const claimMsg = await channel.send(embed);
 		claimMsg.react("✔");
@@ -62,5 +69,37 @@ export default class MessageEvent extends BaseEvent {
 			return dm.send(
 				"> 😢 | No one was able to claim your ticket, please open a new one if you wish to speak to a staff member."
 			);
+
+		const first = emojiCollector.first();
+		const ticketChannel = await this.createChannel(
+			message.author.id,
+			first.users.cache.find((u) => !u.bot).id,
+			channel.guild
+		);
+
+		const ticketEmbed = new MessageEmbed()
+			.setColor("#9295F8")
+			.setDescription([
+				`> 👤 | **Ticket Owner**: ${message.author.toString()}`,
+				`> 📋 | **Reason**: ${reason.substr(0, 2000)}`,
+			]);
+		ticketChannel.send(ticketEmbed);
+	}
+
+	async createChannel(id: string, claimer: string, guild: Guild) {
+		return await guild.channels.create(`${id}-ticket`, {
+			type: "text",
+			topic: `${claimer}|Do not edit this channel, doing so might result in a broken ticket!`,
+			permissionOverwrites: [
+				{
+					id: claimer,
+					allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES"],
+				},
+				{
+					id: guild.id,
+					deny: ["VIEW_CHANNEL"],
+				},
+			],
+		});
 	}
 }
