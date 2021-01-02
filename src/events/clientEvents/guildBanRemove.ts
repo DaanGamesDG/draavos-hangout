@@ -1,8 +1,8 @@
-import BaseEvent from "../../../utils/structures/baseEvent";
-import DiscordClient from "../../../client/client";
-import { modlog } from "../../../../config";
+import BaseEvent from "../../utils/structures/baseEvent";
+import DiscordClient from "../../client/client";
+import { modlog } from "../../../config";
 import { Guild, MessageEmbed, TextChannel, User } from "discord.js";
-import { tempbanSchema } from "../../../utils/database/tempban";
+import { tempbanSchema } from "../../utils/database/tempban";
 export default class MessageEvent extends BaseEvent {
 	constructor() {
 		super("guildBanRemove");
