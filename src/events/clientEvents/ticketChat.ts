@@ -1,17 +1,14 @@
 import {
 	GuildMember,
 	Message,
-	MessageAttachment,
 	NewsChannel,
 	TextChannel,
 	User,
 } from "discord.js";
-import BaseEvent from "../../../utils/structures/baseEvent";
-import DiscordClient from "../../../client/client";
+import BaseEvent from "../../utils/structures/baseEvent";
+import DiscordClient from "../../client/client";
+import { ticketsSchema } from "../../utils/database/ticket";
 import ms from "ms";
-import { blacklisted } from "../../../utils/database/filter";
-import { ignoreBlacklistWord } from "../../../../config";
-import { warnSchema } from "../../../utils/database/warn";
 
 const timeouts: Map<string, number> = new Map();
 
@@ -21,34 +18,51 @@ export default class MessageEvent extends BaseEvent {
 	}
 
 	async run(client: DiscordClient, message: Message) {
-		if (message.author.bot) return;
-		if (
-			message.channel.type == "dm" ||
-			message.channel.name.endsWith("-ticket")
-		)
-			return client.emit("ticketChat", message);
+		switch (message.channel.type) {
+			case "dm":
+				const data1 = await ticketsSchema.findOne({ id: message.author.id });
+				if (!data1) return this.handleCommands(client, message);
 
+				const channel1 =
+					(client.channels.cache.get(data1.get("channel")) as TextChannel) ||
+					((await client.channels.fetch(data1.get("channel"))) as TextChannel);
+
+				channel1.send(
+					`> 💬 | Reply from **${
+						message.author.tag
+					}**:\n\`\`\`${message.content.replace(/`/g, "")}\`\`\``
+				);
+				message.react("✔");
+				break;
+			case "text":
+				const data2 = await ticketsSchema.findOne({
+					channel: message.channel.id,
+				});
+
+				if (!data2 || data2.get("claimer") !== message.author.id) return;
+				if (message.content.startsWith(client.prefix))
+					return this.handleCommands(client, message);
+				const channel2 = await (
+					client.users.cache.get(data2.get("id")) ||
+					(await client.users.fetch(data2.get("id")))
+				).createDM();
+
+				channel2.send(
+					`> 💬 | Reply from **${
+						message.author.tag
+					}**:\n\`\`\`${message.content.replace(/`/g, "")}\`\`\``
+				);
+				message.react("✔");
+				break;
+		}
+	}
+
+	handleCommands(client: DiscordClient, message: Message) {
 		const prefix = process.env.DISCORD_BOT_PREFIX;
 		const mentionPrefixes: string[] = [
 			`<@${client.user.id}>`,
 			`<@!${client.user.id}>`,
 		];
-
-		const filtered = this.filter(message.content.toLowerCase());
-		if (
-			filtered &&
-			message.guild &&
-			!message.member.hasPermission("MANAGE_GUILD") &&
-			!ignoreBlacklistWord.includes(message.channel.id)
-		)
-			return (
-				this.warn(
-					message.content,
-					`Automatic warning for using a blacklisted word (${filtered})`,
-					message.member,
-					client
-				) && message.delete()
-			);
 
 		if (message.content.startsWith(prefix)) {
 			const [cmdName, ...cmdArgs] = message.content
@@ -74,50 +88,6 @@ export default class MessageEvent extends BaseEvent {
 			if (!cmdName) client.emit("ticketCreate", message);
 			return commandHandler(client, message, cmdName, cmdArgs);
 		}
-	}
-
-	filter(str: string) {
-		let blWord: string = null;
-
-		str
-			.split(/\s+/)
-			.forEach((word) =>
-				blacklisted.forEach((w) => (blWord = word.includes(w) ? w : blWord))
-			);
-
-		return blWord;
-	}
-
-	async warn(
-		str: string,
-		reason: string,
-		user: GuildMember,
-		client: DiscordClient
-	) {
-		const caseId = `#${
-			(await warnSchema.find({ guildId: user.guild.id })).length + 1
-		}`;
-		await new warnSchema({
-			id: user.id,
-			guildId: user.guild.id,
-			moderator: client.user.id,
-			reason: reason,
-			case: caseId,
-			date: Date.now(),
-		})
-			.save()
-			.catch((e) => console.log(e));
-
-		user
-			.send(
-				`> 🧾 | **Automatic warn - Draavo's Hangout**
-      > 📃 | Reason: **${reason}**\n\n> ❗ | **This is an automatic warning, the system may not be 100% correct. If I am wrong:** 
-      Create a ticket with the topic: \`warn appeal - automatic warning\` and add \`${str}\` to the description.`,
-				{ split: true }
-			)
-			.catch((e) => null);
-
-		client.emit("warnEvent", user, client.user, caseId, reason);
 	}
 }
 
