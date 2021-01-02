@@ -16,7 +16,6 @@ export default class MessageEvent extends BaseEvent {
 
 	async run(client: DiscordClient) {
 		console.log(`${client.user.tag} has logged in!`);
-		//this.videoAnnouncement(client);
 
 		this.status(client);
 
