@@ -7,6 +7,7 @@ import {
 	ytIdS,
 	ytTokenS,
 } from "../../../config";
+import fetch from "node-fetch";
 
 // setup notifier
 import YouTubeNotifier from "youtube-notification";
