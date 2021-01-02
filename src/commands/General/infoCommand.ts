@@ -28,8 +28,13 @@ export default class PingCommand extends BaseCommand {
 	async run(client: DiscordClient, message: Message, args: Array<string>) {
 		const embed = new MessageEmbed();
 		const user: User = message.guild
-			? client.utils.filterMember(message, args[0] || message.author.id)
-				? client.utils.filterMember(message, args[0] || message.author.id).user
+			? (await client.utils.filterMember(message, args[0] || message.author.id))
+				? (
+						await client.utils.filterMember(
+							message,
+							args[0] || message.author.id
+						)
+				  ).user
 				: await client.users
 						.fetch(args[0] || message.author.id)
 						.catch((e) => null)
@@ -84,7 +89,7 @@ export default class PingCommand extends BaseCommand {
 			);
 
 		const member = message.guild
-			? client.utils.filterMember(message, user.id)
+			? await client.utils.filterMember(message, user.id)
 			: null;
 		if (member) {
 			const r = member.roles.cache
