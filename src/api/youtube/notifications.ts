@@ -12,7 +12,8 @@ import {
 import YouTubeNotifier from "youtube-notification";
 const domain: string = "https://draavos-hangout.herokuapp.com";
 const notifier = new YouTubeNotifier({
-	hubCallback: `http://${domain}/yt`,
+	port: process.env.PORT,
+	hubCallback: `${domain}/yt`,
 	secret: "very_cool_secret",
 });
 
@@ -36,7 +37,7 @@ notifier.on("notified", (data: Data) => {
 notifier.subscribe(channelIds);
 
 // setup web server for callback
-import http from "https";
+import https from "https";
 import express from "express";
 import { WebhookClient } from "discord.js";
 
@@ -44,9 +45,10 @@ const webhook = new WebhookClient(ytId, ytToken);
 const webhookS = new WebhookClient(ytIdS, ytTokenS);
 const app = express();
 
-const server = http.createServer(app);
+const server = https.createServer(app);
 
 app.use("/yt", notifier.listener());
+
 server.listen(process.env.PORT, () =>
 	console.log("api online and listening to port " + process.env.PORT)
 );
