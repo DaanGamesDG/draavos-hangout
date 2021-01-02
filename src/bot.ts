@@ -2,7 +2,7 @@ import { config } from "dotenv";
 config();
 
 import DiscordClient from "./client/client";
-//import "./api/youtube/notifications";
+import "./api/notifications";
 
 const client = new DiscordClient(
 	{
