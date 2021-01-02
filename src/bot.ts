@@ -5,21 +5,22 @@ import DiscordClient from "./client/client";
 import "./api/youtube/notifications";
 
 const client = new DiscordClient(
-  {
-    dbUrl: process.env.DB_URL,
-    baseDir: __dirname,
-    commandsDir: "./commands",
-    eventsDir: "./events/clientEvents",
-    owners: ["304986851310043136"],
-  },
-  {
-    disableMentions: "everyone",
-    messageCacheLifetime: 864e5 * 7,
-    partials: ["CHANNEL", "MESSAGE", "GUILD_MEMBER", "USER", "REACTION"],
-  },
+	{
+		dbUrl: process.env.DB_URL,
+		baseDir: __dirname,
+		commandsDir: "./commands",
+		eventsDir: "./events/clientEvents",
+		owners: ["304986851310043136"],
+	},
+	{
+		disableMentions: "everyone",
+		messageCacheLifetime: 864e5 * 7,
+		partials: ["CHANNEL", "MESSAGE", "GUILD_MEMBER", "USER", "REACTION"],
+		fetchAllMembers: true,
+	}
 );
 
 (async () => {
-  client.connect();
-  client.start(process.env.DISCORD_BOT_TOKEN);
-})()
+	client.connect();
+	client.start(process.env.DISCORD_BOT_TOKEN);
+})();
