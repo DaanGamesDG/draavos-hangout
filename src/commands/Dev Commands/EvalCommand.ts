@@ -1,5 +1,5 @@
 import { Message, MessageEmbed, MessageAttachment } from "discord.js";
-import BaseCommand from "../../utils/structures/BaseCommand";
+import BaseCommand from "../../utils/structures/baseCommand";
 import DiscordClient from "../../client/client";
 import { inspect } from "util";
 import { Buffer } from "buffer";
