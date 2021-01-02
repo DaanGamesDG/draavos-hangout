@@ -8,8 +8,12 @@ export const muteRole: string = "754004272664018956";
 
 // youtube notifications
 export const channelIds: string[] = [
+	"UCKiU0TIf9z_RV2jRe8wAgug",
 	"UCkMrp3dJhWz2FcGTzywQGWg",
-	"UC1FS4BM8QzxF-vagS7l3N5Q",
+	"UCo3SvWfQGaKdKAE_b_hn-Sg",
+	"UCtj4a6GdkoRRYnkKzf5S_Mw",
+	"UCUzcruQJ-eqsSP_U4igNu6A",
+	"UCik27tNXBhE_H62XgsLxSbQ", // test account
 ];
 export const DraavoMsg: string =
 	"<@&709908903135019010> \n**{channelName}** just posted an **EPIC** video! Make sure to check it out below!\n{link}";
