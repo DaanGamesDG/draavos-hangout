@@ -12,7 +12,6 @@ import {
 import YouTubeNotifier from "youtube-notification";
 const domain: string = "https://draavos-hangout.herokuapp.com";
 const notifier = new YouTubeNotifier({
-	port: process.env.PORT,
 	hubCallback: `${domain}/yt`,
 	secret: "very_cool_secret",
 });
