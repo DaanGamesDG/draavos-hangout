@@ -1,18 +1,12 @@
-import BaseEvent from "../../../utils/structures/BaseEvent";
+import BaseEvent from "../../../utils/structures/baseEvent";
 import DiscordClient from "../../../client/client";
 import { muteRole, systemLog, systemLogPublic } from "../../../../config";
-import {
-	ClientVoiceManager,
-	GuildMember,
-	MessageEmbed,
-	TextChannel,
-} from "discord.js";
+import { GuildMember, MessageEmbed, TextChannel } from "discord.js";
 import fetch from "node-fetch";
 import moment from "moment";
 import { tempbanSchema } from "../../../utils/database/tempban";
 import { muteSchema } from "../../../utils/database/mute";
 import ms from "ms";
-import { userInfo } from "os";
 
 const baseURL1 = "https://verify.eryn.io/api/user/";
 const baseURL2 = "https://api.blox.link/v1/user/";

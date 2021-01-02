@@ -5,10 +5,10 @@ import {
 	TextChannel,
 	User,
 } from "discord.js";
-import BaseEvent from "../../../utils/structures/BaseEvent";
+import BaseEvent from "../../../utils/structures/baseEvent";
 import DiscordClient from "../../../client/client";
 import ms from "ms";
-import { blacklisted, whitelisted } from "../../../utils/database/filter";
+import { blacklisted } from "../../../utils/database/filter";
 import { ignoreBlacklistWord } from "../../../../config";
 import { warnSchema } from "../../../utils/database/warn";
 
