@@ -16,7 +16,7 @@ export default class PingCommand extends BaseCommand {
 	}
 
 	async run(client: DiscordClient, message: Message, args: Array<string>) {
-		let member = client.utils.filterMember(message, args[0] || "");
+		let member = await client.utils.filterMember(message, args[0] || "");
 		if (!member) member = message.member;
 
 		const png = member.user.displayAvatarURL({

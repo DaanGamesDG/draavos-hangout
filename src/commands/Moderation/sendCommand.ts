@@ -18,7 +18,7 @@ export default class banCommand extends BaseCommand {
 	}
 
 	async run(client: DiscordClient, message: Message, args: Array<string>) {
-		const member = client.utils.filterMember(message, args[0]);
+		const member = await client.utils.filterMember(message, args[0]);
 		const msg = args.slice(1).join(" ");
 
 		if (!member)

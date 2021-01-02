@@ -19,7 +19,10 @@ export default class banCommand extends BaseCommand {
 
 	async run(client: DiscordClient, message: Message, args: Array<string>) {
 		const redtick = client.utils.EmojiFinder("redtick").toString();
-		const member: GuildMember = client.utils.filterMember(message, args[0]);
+		const member: GuildMember = await client.utils.filterMember(
+			message,
+			args[0]
+		);
 		const reason = args.slice(1).join(" ") || "No reason given";
 
 		if (!member)

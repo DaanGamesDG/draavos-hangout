@@ -17,7 +17,7 @@ export default class tictactoeCommand extends BaseCommand {
 	}
 
 	async run(client: DiscordClient, message: Message, args: Array<string>) {
-		const member = client.utils.filterMember(message, args[0]);
+		const member = await client.utils.filterMember(message, args[0]);
 		if (!member || member.id === message.author.id)
 			return message.channel.send(
 				`> 🔎 | I didn't find a different user called "${args[0]}". `

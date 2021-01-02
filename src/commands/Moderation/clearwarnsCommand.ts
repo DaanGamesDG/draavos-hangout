@@ -19,7 +19,10 @@ export default class warnCommand extends BaseCommand {
 
 	async run(client: DiscordClient, message: Message, args: Array<string>) {
 		const redtick = client.utils.EmojiFinder("redtick").toString();
-		const member: GuildMember = client.utils.filterMember(message, args[0]);
+		const member: GuildMember = await client.utils.filterMember(
+			message,
+			args[0]
+		);
 
 		if (!member)
 			return message.channel.send(

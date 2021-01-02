@@ -98,13 +98,17 @@ export default class Util {
 			: formattedPerms[0];
 	}
 
-	public filterMember(message: Message, id: string): GuildMember {
+	public async filterMember(
+		message: Message,
+		id: string
+	): Promise<GuildMember> {
 		return message.mentions.members.size
 			? message.mentions.members.last()
 			: id.length
 			? message.guild.members.cache.get(id) ||
 			  message.guild.members.cache.find((m) => m.user.username == id) ||
-			  message.guild.members.cache.find((m) => m.user.tag == id)
+			  message.guild.members.cache.find((m) => m.user.tag == id) ||
+			  (await message.guild.members.fetch(id).catch((e) => null))
 			: undefined;
 	}
 

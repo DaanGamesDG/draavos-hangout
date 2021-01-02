@@ -21,8 +21,8 @@ export default class tempbanCommand extends BaseCommand {
 
 	async run(client: DiscordClient, message: Message, args: Array<string>) {
 		const redtick = client.utils.EmojiFinder("redtick").toString();
-		const user: User = client.utils.filterMember(message, args[0])
-			? client.utils.filterMember(message, args[0]).user
+		const user: User = (await client.utils.filterMember(message, args[0]))
+			? (await client.utils.filterMember(message, args[0])).user
 			: await client.users.fetch(args[0]).catch((e) => null);
 		const duration = ms(args[1]);
 		const reason = args.slice(2).join(" ") || "No reason given";
