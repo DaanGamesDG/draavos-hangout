@@ -69,7 +69,7 @@ export default class muteCommand extends BaseCommand {
 				.catch((e) => (DMed = false));
 		}
 
-		const schema = await new muteSchema({
+		await new muteSchema({
 			guildId: message.guild.id,
 			moderator: message.author.id,
 			id: member.id,
