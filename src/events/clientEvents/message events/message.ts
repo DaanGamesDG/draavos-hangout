@@ -105,8 +105,8 @@ export default class MessageEvent extends BaseEvent {
 		user
 			.send(
 				`> 🧾 | **Automatic warn - Draavo's Hangout**
-      \n> 📃 | Reason: **${reason}**\n\n> ❗ | **This is an automatic warning, the system may not be 100% correct. If I am wrong:** 
-      \n Create a ticket with the topic: \`warn appeal - automatic warning\` and add \`${str}\` to the description.`,
+      > 📃 | Reason: **${reason}**\n\n> ❗ | **This is an automatic warning, the system may not be 100% correct. If I am wrong:** 
+      Create a ticket with the topic: \`warn appeal - automatic warning\` and add \`${str}\` to the description.`,
 				{ split: true }
 			)
 			.catch((e) => null);

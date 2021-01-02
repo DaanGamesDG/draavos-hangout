@@ -1,6 +1,26 @@
 export const blacklisted: string[] = [
-  "fuck",
-  "cunt",
+	"fuck",
+	"nigg",
+	"fuk",
+	"cunt",
+	"cnut",
+	"bitch",
+	"dick",
+	"d1ck",
+	"pussy",
+	"asshole",
+	"b1tch",
+	"b!tch",
+	"blowjob",
+	"c0ck",
+	"ahole",
+	"nigger",
+	"nigga",
+	"shitty",
+	"shit",
+	"shite",
+	":middle_finger:",
+	"🖕",
 ];
 
 export const whitelisted: string[] = [];
