@@ -1,6 +1,5 @@
 import BaseEvent from "../../../utils/structures/baseEvent";
 import DiscordClient from "../../../client/client";
-import { msgLogId, msgLogToken } from "../../../../config";
 import {
 	MessageEmbed,
 	Message,
@@ -9,7 +8,10 @@ import {
 	Collection,
 } from "discord.js";
 
-const webhook = new WebhookClient(msgLogId, msgLogToken);
+const webhook = new WebhookClient(
+	process.env.MSGLOGID,
+	process.env.MSGLOGTOKEN
+);
 
 export default class muteEvent extends BaseEvent {
 	constructor() {

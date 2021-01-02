@@ -1,12 +1,4 @@
-import {
-	channelIds,
-	DraavoMsg,
-	seniorTeamMsg,
-	ytId,
-	ytToken,
-	ytIdS,
-	ytTokenS,
-} from "../../../config";
+import { channelIds, DraavoMsg, seniorTeamMsg } from "../../../config";
 
 // // setup notifier
 // import YouTubeNotifier from "youtube-notification";
@@ -82,8 +74,8 @@ import {
 import { WebhookClient } from "discord.js";
 import Parser from "rss-parser";
 
-const webhook = new WebhookClient(ytId, ytToken);
-const webhookS = new WebhookClient(ytIdS, ytTokenS);
+const webhook = new WebhookClient(process.env.YTID, process.env.YTTOKEN);
+const webhookS = new WebhookClient(process.env.YTIDS, process.env.YTTOKENS);
 const parser = new Parser();
 const links: string[] = [];
 

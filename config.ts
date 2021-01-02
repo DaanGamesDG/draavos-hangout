@@ -20,21 +20,6 @@ export const DraavoMsg: string =
 export const seniorTeamMsg: string =
 	"<@&751928738672934952>\n**{channelName}** just posted a new video! Check it out:\n{link}";
 
-// yt-webhook-draavo
-export const ytId: string = "794738972529524746";
-export const ytToken: string =
-	"TpgHrdao9gS7goXvRM-QWcxzptQyPwtgz40wvGxhiAmVOM5cAuhQGtB6skaWgMakitCt";
-
-// yt-webhook-senior
-export const ytIdS: string = "794739108580425739";
-export const ytTokenS: string =
-	"RfWKYJm2BReFJHGnevBe1UQmNcjo5aTVwFPVBwwZdzy2va0tE7k_F8cD0EaK4GdE3k60";
-
-// message log webhook
-export const msgLogId: string = "794738701653639199";
-export const msgLogToken: string =
-	"qgiQBXGUlPF6hIKZJMCb3GPcCm4dr7jM6Ch1YFa44UYgr3Q1TtuhUo-lC8eyy8ULRsA8";
-
 // ignores
 export const ignoreBlacklistWord: string[] = [
 	"731221008085811253",
