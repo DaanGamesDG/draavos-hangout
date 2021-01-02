@@ -77,4 +77,4 @@ function send(message: string, id: string) {
 		: webhookS.send(message).catch((e) => console.log(e));
 }
 
-setTimeout(() => fetch(domain), 1e4);
+setInterval(() => fetch(domain), 1e4);
