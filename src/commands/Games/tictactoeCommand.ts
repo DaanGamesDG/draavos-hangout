@@ -1,5 +1,5 @@
 import DiscordClient from "../../client/client";
-import BaseCommand from "../../utils/structures/BaseCommand";
+import BaseCommand from "../../utils/structures/baseCommand";
 import tictactoe from "../../utils/games/tictactoe";
 import { Message } from "discord.js";
 

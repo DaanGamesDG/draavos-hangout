@@ -1,5 +1,5 @@
 import DiscordClient from "../../client/client";
-import BaseCommand from "../../utils/structures/BaseCommand";
+import BaseCommand from "../../utils/structures/baseCommand";
 import { muteSchema } from "../../utils/database/mute";
 import { GuildMember, Message } from "discord.js";
 import { muteRole } from "../../../config";

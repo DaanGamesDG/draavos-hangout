@@ -1,5 +1,5 @@
 import DiscordClient from "../../client/client";
-import BaseCommand from "../../utils/structures/BaseCommand";
+import BaseCommand from "../../utils/structures/baseCommand";
 import hangMan from "../../utils/games/hangMan";
 import { Message } from "discord.js";
 

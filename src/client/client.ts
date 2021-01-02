@@ -1,6 +1,6 @@
 import { Client, ClientOptions, Collection } from "discord.js";
-import BaseCommand from "../utils/structures/BaseCommand";
-import BaseEvent from "../utils/structures/BaseEvent";
+import BaseCommand from "../utils/structures/baseCommand";
+import BaseEvent from "../utils/structures/baseEvent";
 import Utils from "../utils/extensions/utils/utils";
 import { Options } from "./interfaces";
 import { promises as fs } from "fs";

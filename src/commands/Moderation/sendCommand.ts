@@ -1,6 +1,6 @@
 import DiscordClient from "../../client/client";
-import BaseCommand from "../../utils/structures/BaseCommand";
-import { GuildMember, Message, User } from "discord.js";
+import BaseCommand from "../../utils/structures/baseCommand";
+import { Message } from "discord.js";
 
 export default class banCommand extends BaseCommand {
 	constructor() {

@@ -1,5 +1,5 @@
 import { Message } from "discord.js";
-import BaseCommand from "../../utils/structures/BaseCommand";
+import BaseCommand from "../../utils/structures/baseCommand";
 import DiscordClient from "../../client/client";
 
 const ball: Array<string> = [

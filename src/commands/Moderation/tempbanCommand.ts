@@ -1,5 +1,5 @@
 import DiscordClient from "../../client/client";
-import BaseCommand from "../../utils/structures/BaseCommand";
+import BaseCommand from "../../utils/structures/baseCommand";
 import { GuildMember, Message, User } from "discord.js";
 import { tempbanSchema } from "../../utils/database/tempban";
 import ms from "ms";
