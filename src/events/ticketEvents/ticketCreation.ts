@@ -1,11 +1,9 @@
 import {
 	Collection,
 	Guild,
-	GuildMember,
 	Message,
 	MessageEmbed,
 	MessageReaction,
-	NewsChannel,
 	TextChannel,
 	User,
 } from "discord.js";
