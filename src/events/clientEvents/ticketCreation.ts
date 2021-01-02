@@ -57,6 +57,8 @@ export default class MessageEvent extends BaseEvent {
 			]);
 		const claimMsg = await channel.send(embed);
 		claimMsg.react("✔");
+		dm.send("> 🎫 | Ticket created! Support will be with you shortly.");
+
 		const emojiCollector = await claimMsg
 			.awaitReactions(emojiFilter, { max: 1, time: 864e5, errors: ["time"] })
 			.catch((e) => new Collection<string, MessageReaction>());

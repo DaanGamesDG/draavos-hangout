@@ -21,7 +21,7 @@ export default class MessageEvent extends BaseEvent {
 		switch (message.channel.type) {
 			case "dm":
 				const data1 = await ticketsSchema.findOne({ id: message.author.id });
-				if (data1) return this.handleCommands(client, message);
+				if (!data1) return this.handleCommands(client, message);
 
 				const channel1 =
 					(client.channels.cache.get(data1.get("channel")) as TextChannel) ||
