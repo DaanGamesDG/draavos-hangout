@@ -1,18 +1,18 @@
-import BaseEvent from "../../../utils/structures/baseEvent";
-import DiscordClient from "../../../client/client";
-import { muteRole, systemLog, systemLogPublic } from "../../../../config";
+import BaseEvent from "../../utils/structures/baseEvent";
+import DiscordClient from "../../client/client";
+import { muteRole, systemLog, systemLogPublic } from "../../../config";
 import { GuildMember, MessageEmbed, TextChannel } from "discord.js";
 import fetch from "node-fetch";
 import moment from "moment";
-import { tempbanSchema } from "../../../utils/database/tempban";
-import { muteSchema } from "../../../utils/database/mute";
+import { tempbanSchema } from "../../utils/database/tempban";
+import { muteSchema } from "../../utils/database/mute";
 import ms from "ms";
 
 const baseURL1 = "https://verify.eryn.io/api/user/";
 const baseURL2 = "https://api.blox.link/v1/user/";
 const invalidJoins = new Map<string, number>();
 
-export default class MessageEvent extends BaseEvent {
+export default class guildMemberAddEvent extends BaseEvent {
 	constructor() {
 		super("guildMemberAdd");
 	}
@@ -33,16 +33,15 @@ export default class MessageEvent extends BaseEvent {
 
 		if (
 			//(acc1.status === "error", acc1.errorCode === 404) &&
-			(acc2.error === "This user is not linked with Bloxlink.",
-			acc2.status == "error") &&
+			acc2.error &&
+			acc2.status == "error" &&
 			Date.now() - member.user.createdTimestamp < 1296e6 &&
 			!member.user.bot &&
-			(member.user.displayAvatarURL().includes(".gif") ||
-				member.user.tag.includes("0001") ||
-				member.user.tag.includes("9999") ||
-				member.user.tag.includes("6666") ||
-				member.user.tag.includes("0003")) &&
-			(await member.user.fetchFlags()).toArray().length > 0
+			(!member.user.displayAvatarURL().includes(".gif") ||
+				!member.user.tag.includes("0001") ||
+				!member.user.tag.includes("9999") ||
+				!member.user.tag.includes("6666") ||
+				!member.user.tag.includes("0003"))
 		) {
 			const joins =
 				invalidJoins.get(member.id) ||

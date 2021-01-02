@@ -1,10 +1,10 @@
-import BaseEvent from "../../../utils/structures/baseEvent";
-import DiscordClient from "../../../client/client";
-import { systemLog, systemLogPublic } from "../../../../config";
+import BaseEvent from "../../utils/structures/baseEvent";
+import DiscordClient from "../../client/client";
+import { systemLog, systemLogPublic } from "../../../config";
 import { GuildMember, MessageEmbed, TextChannel } from "discord.js";
 import moment from "moment";
 
-export default class MessageEvent extends BaseEvent {
+export default class guildMemberRemoveEvent extends BaseEvent {
 	constructor() {
 		super("guildMemberRemove");
 	}

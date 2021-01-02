@@ -21,6 +21,7 @@ export default class MessageEvent extends BaseEvent {
 
 	async run(client: DiscordClient, message: Message) {
 		if (message.author.bot) return;
+		if (message.channel.type == "dm") return client.emit("ticketChat", message);
 
 		const prefix = process.env.DISCORD_BOT_PREFIX;
 		const mentionPrefixes: string[] = [
@@ -57,7 +58,7 @@ export default class MessageEvent extends BaseEvent {
 				.trim()
 				.split(/\s+/);
 
-			if (!cmdName) client.emit("ticketCreate", message, cmdArgs);
+			if (!cmdName) client.emit("ticketCreate", message);
 			return commandHandler(client, message, cmdName, cmdArgs);
 		} else if (message.content.startsWith(mentionPrefixes[1])) {
 			const [cmdName, ...cmdArgs] = message.content
@@ -65,7 +66,7 @@ export default class MessageEvent extends BaseEvent {
 				.trim()
 				.split(/\s+/);
 
-			if (!cmdName) client.emit("ticketCreate", message, cmdArgs);
+			if (!cmdName) client.emit("ticketCreate", message);
 			return commandHandler(client, message, cmdName, cmdArgs);
 		}
 	}
