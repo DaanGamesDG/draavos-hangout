@@ -13,10 +13,10 @@ export const channelIds: string[] = [
 	"UCo3SvWfQGaKdKAE_b_hn-Sg",
 	"UCtj4a6GdkoRRYnkKzf5S_Mw",
 	"UCUzcruQJ-eqsSP_U4igNu6A",
-	"UCik27tNXBhE_H62XgsLxSbQ", // test account
+	//"UCik27tNXBhE_H62XgsLxSbQ", // test account
 ];
 export const DraavoMsg: string =
-	"<@&709908903135019010> \n**{channelName}** just posted an **EPIC** video! Make sure to check it out below!\n{link}";
+	"<@&709908903135019010 \n**{channelName}** just posted an **EPIC** video! Make sure to check it out below!\n{link}";
 export const seniorTeamMsg: string =
 	"<@&751928738672934952\n**{channelName}** just posted a new video! Check it out:\n{link}";
 
