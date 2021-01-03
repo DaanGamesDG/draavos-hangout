@@ -30,7 +30,7 @@ export default class muteEvent extends BaseEvent {
 
 		const content = splitMessage(
 			cachedMessages
-				.sort((m1, m2) => m2.createdTimestamp - m1.createdTimestamp)
+				.sort((m1, m2) => m1.createdTimestamp - m2.createdTimestamp)
 				.map(
 					(m) =>
 						`**${m.author.tag}**: ${
