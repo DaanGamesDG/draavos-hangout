@@ -30,7 +30,9 @@ export default class owofyCommand extends BaseCommand {
 				)} | You can only use this command in <#727992822036430859> or in DMs.`
 			);
 
-		const file = files[Math.random() * files.length];
-		return message.channel.send(file);
+		const file = files[Math.random() * files.length - 1];
+		return message.channel.send(
+			`> ${client.utils.EmojiFinder("meow_uwu")} | Uwu, ` + file
+		);
 	}
 }
