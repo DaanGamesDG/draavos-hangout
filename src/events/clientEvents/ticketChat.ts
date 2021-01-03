@@ -43,9 +43,10 @@ export default class MessageEvent extends BaseEvent {
 					channel: message.channel.id,
 				});
 
-				if (!data2 || data2.get("claimer") !== message.author.id) return;
 				if (message.content.startsWith(client.prefix))
 					return this.handleCommands(client, message);
+
+				if (!data2 || data2.get("claimer") !== message.author.id) return;
 				const channel2 = await (
 					client.users.cache.get(data2.get("id")) ||
 					(await client.users.fetch(data2.get("id")))

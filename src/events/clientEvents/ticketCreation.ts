@@ -101,6 +101,10 @@ export default class MessageEvent extends BaseEvent {
 					id: guild.id,
 					deny: ["VIEW_CHANNEL"],
 				},
+				{
+					id: "701783284895580182",
+					allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES"],
+				},
 			],
 		});
 
