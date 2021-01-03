@@ -35,7 +35,9 @@ export default class muteEvent extends BaseEvent {
 						m.content.replace(/\\n/g, "") || "No message content"
 					}`
 			)
-		).filter((str) => str.length > 0);
+		)
+			.filter((str) => str.length > 0)
+			.reverse();
 
 		let i: number = 0;
 		const embeds: MessageEmbed[] = [];
