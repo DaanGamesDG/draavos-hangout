@@ -17,7 +17,7 @@ export default class channelDeleteEvent extends BaseEvent {
 
 		user
 			.send(
-				"👍 | Your ticket is now closed, thanks for getting in touch! \n> ❓ | Questions? Don't hesitate to contact us again, we are always happy to help!\n\n If you have time, give our staff team some feedback: https://forms.gle/CbEVRuGPywjZausd9"
+				"> 👍 | Your ticket is now closed, thanks for getting in touch! \n> ❓ | Questions? Don't hesitate to contact us again, we are always happy to help!\n\n If you have time, give our staff team some feedback: https://forms.gle/CbEVRuGPywjZausd9"
 			)
 			.catch((e) => null);
 	}
