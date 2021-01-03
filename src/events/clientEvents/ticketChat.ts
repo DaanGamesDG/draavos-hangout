@@ -33,7 +33,8 @@ export default class MessageEvent extends BaseEvent {
 				channel1.send(
 					`> 💬 | Reply from **${
 						message.author.tag
-					}**:\n\`\`\`${message.content.replace(/`/g, "")}\`\`\``
+					}**:\n\`\`\`${message.content.replace(/`/g, "")}\`\`\``,
+					{ files: client.utils.getAttachments(message.attachments) }
 				);
 				message.react("✔");
 				break;
@@ -53,7 +54,8 @@ export default class MessageEvent extends BaseEvent {
 				channel2.send(
 					`> 💬 | Reply from **${
 						message.author.tag
-					}**:\n\`\`\`${message.content.replace(/`/g, "")}\`\`\``
+					}**:\n\`\`\`${message.content.replace(/`/g, "")}\`\`\``,
+					{ files: client.utils.getAttachments(message.attachments) }
 				);
 				message.react("✔");
 				break;
