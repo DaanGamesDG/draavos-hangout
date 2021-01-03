@@ -24,7 +24,8 @@ export default class activeCommand extends BaseCommand {
 				`> 🔎 | I didn't find a user called "${args[0]}".`
 			);
 
-		const plain = (await user.lastMessage.fetch()).createdTimestamp;
+		const plain = (await (await user.fetch()).lastMessage.fetch())
+			.createdTimestamp;
 		const date =
 			moment(plain).format("MMMM Do YYYY hh:mm:ss") +
 			" | " +
