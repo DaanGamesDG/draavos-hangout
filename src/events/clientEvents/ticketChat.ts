@@ -31,9 +31,9 @@ export default class MessageEvent extends BaseEvent {
 					((await client.channels.fetch(data1.get("channel"))) as TextChannel);
 
 				channel1.send(
-					`> 💬 | Reply from **${
-						message.author.tag
-					}**:\n\`\`\`${message.content.replace(/`/g, "")}\`\`\``,
+					`> 💬 | Reply from **${message.author.tag}**:\n\`\`\`${(
+						message.content || "No message content"
+					).replace(/`/g, "")}\`\`\``,
 					{ files: client.utils.getAttachments(message.attachments) }
 				);
 				message.react("✔");
@@ -53,9 +53,9 @@ export default class MessageEvent extends BaseEvent {
 				).createDM();
 
 				channel2.send(
-					`> 💬 | Reply from **${
-						message.author.tag
-					}**:\n\`\`\`${message.content.replace(/`/g, "")}\`\`\``,
+					`> 💬 | Reply from **${message.author.tag}**:\n\`\`\`${(
+						message.content || "No message content"
+					).replace(/`/g, "")}\`\`\``,
 					{ files: client.utils.getAttachments(message.attachments) }
 				);
 				message.react("✔");

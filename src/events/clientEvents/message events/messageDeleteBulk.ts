@@ -29,15 +29,15 @@ export default class muteEvent extends BaseEvent {
 		await message.channel.fetch(true);
 
 		const content = splitMessage(
-			cachedMessages.map(
-				(m) =>
-					`**${m.author.tag}**: ${
-						m.content.replace(/\\n/g, "") || "No message content"
-					}`
-			)
-		)
-			.filter((str) => str.length > 0)
-			.reverse();
+			cachedMessages
+				.sort((m1, m2) => m2.createdTimestamp - m1.createdTimestamp)
+				.map(
+					(m) =>
+						`**${m.author.tag}**: ${
+							m.content.replace(/\\n/g, "") || "No message content"
+						}`
+				)
+		).filter((str) => str.length > 0);
 
 		let i: number = 0;
 		const embeds: MessageEmbed[] = [];
