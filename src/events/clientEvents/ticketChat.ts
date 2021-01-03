@@ -14,10 +14,13 @@ const timeouts: Map<string, number> = new Map();
 
 export default class MessageEvent extends BaseEvent {
 	constructor() {
-		super("message");
+		super("ticketChat");
 	}
 
 	async run(client: DiscordClient, message: Message) {
+		// @ts-ignore
+		message.channel = await message.channel.fetch();
+
 		switch (message.channel.type) {
 			case "dm":
 				const data1 = await ticketsSchema.findOne({ id: message.author.id });
