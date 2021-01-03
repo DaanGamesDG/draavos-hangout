@@ -24,14 +24,17 @@ export default class PingCommand extends BaseCommand {
 
 		if (
 			!message.channel.topic.includes(message.author.id) &&
-			message.member.permissions.missing("MANAGE_GUILD")
+			!message.member.hasPermission("MANAGE_GUILD", {
+				checkAdmin: true,
+				checkOwner: true,
+			})
 		)
 			return message.channel.send(
 				"> 👮‍♂️ | This is not your ticket, you can only close your own tickets unless you have the `Manage Server` permissions."
 			);
 
 		ticketsSchema.findOneAndDelete({ channel: message.channel.id }, {}, (e) => {
-			if (e) return message.channel.send(e);
+			if (e) return message.channel.send(e || "unkown error");
 		});
 
 		message.channel.delete();
