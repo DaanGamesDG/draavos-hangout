@@ -110,7 +110,7 @@ export default class guildMemberAddEvent extends BaseEvent {
 				? client.utils.EmojiFinder("greentick").toString()
 				: client.utils.EmojiFinder("redtick").toString();
 
-		const embed = new MessageEmbed();
+		const embed = new MessageEmbed().setFooter(`ID: ${member.id}`);
 
 		if (!kicked) {
 			embed

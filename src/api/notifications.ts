@@ -45,7 +45,7 @@ app.listen(process.env.PORT, () =>
 setTimeout(() => notifier.subscribe(channelIds), 7e3);
 setInterval(() => fetch("https://draavos-hangout.herokuapp.com/"), 6e5 * 10);
 
-function send(message, id) {
+function send(message: string, id: string) {
 	id === "UCkMrp3dJhWz2FcGTzywQGWg"
 		? webhook.send(message).catch((e) => console.log(e))
 		: webhookS.send(message).catch((e) => console.log(e));

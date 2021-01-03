@@ -18,6 +18,7 @@ export default class guildMemberRemoveEvent extends BaseEvent {
 
 		const embed = new MessageEmbed()
 			.setColor("#FFF4B4")
+			.setFooter(`ID: ${member.id}`)
 			.setTitle("Member left")
 			.setDescription([
 				`> 👤 | **User**: ${member.toString()}`,
