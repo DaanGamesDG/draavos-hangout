@@ -29,7 +29,7 @@ export default class MessageEvent extends BaseEvent {
 		const dm = await message.author.createDM();
 		const check: Message = await dm
 			.send(
-				`> ❓ | Why do you want to open a ticket? Please describe it with as much detail as possible.`
+				"> 👋 Hello! What is the reason behind your ticket today? Please provide as much detail as possible so that we can help you as best as we can!"
 			)
 			.catch((e) => null);
 		if (!check)
