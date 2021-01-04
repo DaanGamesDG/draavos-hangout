@@ -5,11 +5,9 @@ import ms from "ms";
 import { blacklisted } from "../../../utils/database/filter";
 import { ignoreBlacklistWord } from "../../../../config";
 import { warnSchema } from "../../../utils/database/warn";
-import { clear, time } from "console";
 
 const timeouts: Map<string, number> = new Map();
 const spamfilter: Map<string, number> = new Map();
-const Time: Map<string, NodeJS.Timeout> = new Map();
 
 export default class MessageEvent extends BaseEvent {
 	constructor() {
@@ -129,12 +127,11 @@ export default class MessageEvent extends BaseEvent {
 	async spamFilter(client: DiscordClient, message: Message) {
 		const count = spamfilter.get(message.author.id) || 0;
 
+		if (count == 0) setTimeout(() => spamfilter.delete(message.author.id), 5e3);
 		spamfilter.set(message.author.id, count + 1);
 
-		if (spamfilter.get(message.author.id) >= 7) {
+		if (spamfilter.get(message.author.id) > 7) {
 			spamfilter.delete(message.author.id);
-			clearTimeout(Time.get(message.author.id));
-			Time.delete(message.author.id);
 
 			const reason =
 				"Automatic action carried out for hitting the message rate limit (7/5s)";
@@ -160,14 +157,6 @@ export default class MessageEvent extends BaseEvent {
 				.catch((e) => null);
 
 			client.emit("warnEvent", message.member, client.user, caseId, reason);
-		}
-
-		if (!Time.has(message.author.id)) {
-			const timeout = setTimeout(
-				() => spamfilter.delete(message.author.id),
-				5e3
-			);
-			Time.set(message.author.id, timeout);
 		}
 	}
 }
