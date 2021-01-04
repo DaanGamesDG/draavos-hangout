@@ -1,10 +1,4 @@
-import {
-	GuildMember,
-	Message,
-	NewsChannel,
-	TextChannel,
-	User,
-} from "discord.js";
+import { Message, NewsChannel, TextChannel } from "discord.js";
 import BaseEvent from "../../utils/structures/baseEvent";
 import DiscordClient from "../../client/client";
 import { ticketsSchema } from "../../utils/database/ticket";
