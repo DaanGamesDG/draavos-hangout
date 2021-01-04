@@ -114,12 +114,12 @@ export default class MessageEvent extends BaseEvent {
 			type: "PLAYING",
 		});
 
-		setTimeout(async () => {
+		setInterval(async () => {
 			const data = await (await fetch(url)).json();
 			const subCount = data.items[0].statistics.subscriberCount;
 			client.user.setActivity(`with ${subCount} subscribers!`, {
 				type: "PLAYING",
 			});
-		}, 6e4);
+		}, 6e5);
 	}
 }
