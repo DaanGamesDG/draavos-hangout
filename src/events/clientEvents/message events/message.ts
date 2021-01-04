@@ -159,7 +159,7 @@ export default class MessageEvent extends BaseEvent {
 				)
 				.catch((e) => null);
 
-			client.emit("warnEvent", message.author, client.user, caseId, reason);
+			client.emit("warnEvent", message.member, client.user, caseId, reason);
 		}
 
 		if (!Time.has(message.author.id))
