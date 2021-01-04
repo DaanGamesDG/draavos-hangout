@@ -19,7 +19,7 @@ export default class warnEvent extends BaseEvent {
 			reason === "No reason given"
 				? `\`${client.prefix}reason ${caseId} <reason>\` to give this warning a reason`
 				: reason;
-		const channel = (member.guild.channels.cache.get(modlog) ||
+		const channel = (client.channels.cache.get(modlog) ||
 			client.channels.fetch(modlog)) as TextChannel;
 		const embed = new MessageEmbed()
 			.setTitle(`Warn | Case: ${caseId}`)
