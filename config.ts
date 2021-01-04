@@ -22,6 +22,7 @@ export const seniorTeamMsg: string =
 
 // ignores
 export const ignoreBlacklistWord: string[] = [
+	"723665469894164580",
 	"731221008085811253",
 	"710476110437023825",
 	"710223624442871970",

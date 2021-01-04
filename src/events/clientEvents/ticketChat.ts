@@ -36,7 +36,7 @@ export default class MessageEvent extends BaseEvent {
 					).replace(/`/g, "")}\`\`\``,
 					{ files: client.utils.getAttachments(message.attachments) }
 				);
-				message.react("✔");
+				message.react("✅");
 				break;
 			case "text":
 				const data2 = await ticketsSchema.findOne({
@@ -58,7 +58,7 @@ export default class MessageEvent extends BaseEvent {
 					).replace(/`/g, "")}\`\`\``,
 					{ files: client.utils.getAttachments(message.attachments) }
 				);
-				message.react("✔");
+				message.react("✅");
 				break;
 		}
 	}

@@ -1,19 +1,15 @@
-import {
-	GuildMember,
-	Message,
-	MessageAttachment,
-	NewsChannel,
-	TextChannel,
-	User,
-} from "discord.js";
+import { GuildMember, Message, NewsChannel, TextChannel } from "discord.js";
 import BaseEvent from "../../../utils/structures/baseEvent";
 import DiscordClient from "../../../client/client";
 import ms from "ms";
 import { blacklisted } from "../../../utils/database/filter";
 import { ignoreBlacklistWord } from "../../../../config";
 import { warnSchema } from "../../../utils/database/warn";
+import { clear, time } from "console";
 
 const timeouts: Map<string, number> = new Map();
+const spamfilter: Map<string, number> = new Map();
+const Time: Map<string, NodeJS.Timeout> = new Map();
 
 export default class MessageEvent extends BaseEvent {
 	constructor() {
@@ -49,6 +45,15 @@ export default class MessageEvent extends BaseEvent {
 					client
 				) && message.delete()
 			);
+
+		if (
+			message.member &&
+			!message.member.hasPermission("MANAGE_GUILD", {
+				checkAdmin: true,
+				checkOwner: true,
+			})
+		)
+			this.spamFilter(client, message);
 
 		if (message.content.startsWith(prefix)) {
 			const [cmdName, ...cmdArgs] = message.content
@@ -118,6 +123,49 @@ export default class MessageEvent extends BaseEvent {
 			.catch((e) => null);
 
 		client.emit("warnEvent", user, client.user, caseId, reason);
+	}
+
+	async spamFilter(client: DiscordClient, message: Message) {
+		const count = spamfilter.get(message.author.id) || 0;
+
+		spamfilter.set(message.author.id, count + 1);
+
+		if (spamfilter.get(message.author.id) >= 7) {
+			spamfilter.delete(message.author.id);
+			clearTimeout(Time.get(message.author.id));
+			Time.delete(message.author.id);
+
+			const reason =
+				"Automatic action carried out for hitting the message rate limit (7/5s)";
+			const caseId = `#${
+				(await warnSchema.find({ guildId: message.guild.id })).length + 1
+			}`;
+			await new warnSchema({
+				id: message.author.id,
+				guildId: message.guild.id,
+				moderator: client.user.id,
+				reason: reason,
+				case: caseId,
+				date: Date.now(),
+			})
+				.save()
+				.catch((e) => console.log(e));
+
+			message.author
+				.send(
+					`> 🧾 | **Automatic warn - Draavo's Hangout**\n> 📃 | Reason: **${reason}**`,
+					{ split: true }
+				)
+				.catch((e) => null);
+
+			client.emit("warnEvent", message.author, client.user, caseId, reason);
+		}
+
+		if (!Time.has(message.author.id))
+			Time.set(
+				message.author.id,
+				setTimeout(() => spamfilter.delete(message.author.id), 5e3)
+			);
 	}
 }
 
