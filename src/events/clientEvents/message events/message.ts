@@ -52,7 +52,7 @@ export default class MessageEvent extends BaseEvent {
 				checkAdmin: true,
 				checkOwner: true,
 			}) &&
-			["794256807337263114", "710090914776743966"].includes(message.channel.id)
+			!["794256807337263114", "710090914776743966"].includes(message.channel.id)
 		)
 			this.spamFilter(client, message);
 
@@ -159,7 +159,7 @@ export default class MessageEvent extends BaseEvent {
 				)
 				.catch((e) => null);
 
-			client.emit("warnEvent", message.author, client.user, caseId, reason);
+			client.emit("warnEvent", message.member, client.user, caseId, reason);
 		}
 
 		if (!Time.has(message.author.id))
