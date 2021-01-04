@@ -67,7 +67,7 @@ export default class MessageEvent extends BaseEvent {
 				.trim()
 				.split(/\s+/);
 
-			if (!cmdName) client.emit("ticketCreate", message);
+			if (!cmdName) return client.emit("ticketCreate", message);
 			return commandHandler(client, message, cmdName, cmdArgs);
 		} else if (message.content.startsWith(mentionPrefixes[1])) {
 			const [cmdName, ...cmdArgs] = message.content
@@ -75,7 +75,7 @@ export default class MessageEvent extends BaseEvent {
 				.trim()
 				.split(/\s+/);
 
-			if (!cmdName) client.emit("ticketCreate", message);
+			if (!cmdName) return client.emit("ticketCreate", message);
 			return commandHandler(client, message, cmdName, cmdArgs);
 		}
 	}
