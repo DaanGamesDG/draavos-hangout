@@ -2,6 +2,7 @@ import BaseEvent from "../../../utils/structures/baseEvent";
 import DiscordClient from "../../../client/client";
 import { modlog } from "../../../../config";
 import { GuildMember, MessageEmbed, TextChannel, User } from "discord.js";
+import { warnSchema } from "../../../utils/database/warn";
 
 export default class warnEvent extends BaseEvent {
 	constructor() {
@@ -33,6 +34,16 @@ export default class warnEvent extends BaseEvent {
 				`> 📃 | Reason: **${reason.substr(0, 800)}**`,
 			]);
 
-		return channel.send(embed);
+		channel.send(embed);
+
+		const warningCount = await warnSchema.find({
+			id: member.id,
+			guildId: member.guild.id,
+		});
+		if (warningCount.length % 2 === 0) {
+			const r = `Automatic mute after ${warningCount.length} warnings`;
+
+			client.emit("muteEvent", "mute", member, client.user, r, 6e5);
+		}
 	}
 }

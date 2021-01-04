@@ -162,11 +162,13 @@ export default class MessageEvent extends BaseEvent {
 			client.emit("warnEvent", message.member, client.user, caseId, reason);
 		}
 
-		if (!Time.has(message.author.id))
-			Time.set(
-				message.author.id,
-				setTimeout(() => spamfilter.delete(message.author.id), 5e3)
+		if (!Time.has(message.author.id)) {
+			const timeout = setTimeout(
+				() => spamfilter.delete(message.author.id),
+				5e3
 			);
+			Time.set(message.author.id, timeout);
+		}
 	}
 }
 
