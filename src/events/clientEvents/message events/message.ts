@@ -46,7 +46,14 @@ export default class MessageEvent extends BaseEvent {
 				) && message.delete()
 			);
 
-		this.spamFilter(client, message);
+		if (
+			message.member &&
+			!message.member.hasPermission("MANAGE_GUILD", {
+				checkAdmin: true,
+				checkOwner: true,
+			})
+		)
+			this.spamFilter(client, message);
 
 		if (message.content.startsWith(prefix)) {
 			const [cmdName, ...cmdArgs] = message.content
