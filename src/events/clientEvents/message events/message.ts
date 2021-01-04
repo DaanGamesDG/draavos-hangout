@@ -51,7 +51,8 @@ export default class MessageEvent extends BaseEvent {
 			!message.member.hasPermission("MANAGE_GUILD", {
 				checkAdmin: true,
 				checkOwner: true,
-			})
+			}) &&
+			["794256807337263114", "710090914776743966"].includes(message.channel.id)
 		)
 			this.spamFilter(client, message);
 
