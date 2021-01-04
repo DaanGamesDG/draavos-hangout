@@ -5,6 +5,7 @@ import { channelIds, DraavoMsg, seniorTeamMsg } from "../../config";
 
 const webhook = new WebhookClient(process.env.YTID, process.env.YTTOKEN);
 const webhookS = new WebhookClient(process.env.YTIDS, process.env.YTTOKENS);
+const links: string[] = [];
 
 const notifier = new YouTubeNotifier({
 	hubCallback: "https://draavos-hangout.herokuapp.com/yt",
@@ -12,6 +13,9 @@ const notifier = new YouTubeNotifier({
 });
 
 notifier.on("notified", (data) => {
+	if (links.includes(data.video.link)) return;
+	links.push(data.video.link);
+
 	data.channel.id === "UCkMrp3dJhWz2FcGTzywQGWg"
 		? send(
 				DraavoMsg.replace(/{channelName}/g, data.channel.name).replace(

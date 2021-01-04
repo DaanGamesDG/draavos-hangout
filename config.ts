@@ -13,6 +13,7 @@ export const channelIds: string[] = [
 	"UCo3SvWfQGaKdKAE_b_hn-Sg",
 	"UCtj4a6GdkoRRYnkKzf5S_Mw",
 	"UCUzcruQJ-eqsSP_U4igNu6A",
+	"UCp2yuh619SvvZow35rIymzA",
 	//"UCik27tNXBhE_H62XgsLxSbQ", // test account
 ];
 export const DraavoMsg: string =
