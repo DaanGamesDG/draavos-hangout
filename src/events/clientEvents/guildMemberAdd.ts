@@ -115,7 +115,7 @@ export default class guildMemberAddEvent extends BaseEvent {
 		if (!kicked) {
 			embed
 				.setColor("#58DCAE")
-				.setTitle("Member joined")
+				.setTitle("Member joined: " + member.user.tag)
 				.setDescription([
 					`> 👤 | **User**: ${member.toString()}`,
 					`> 📆 | **Creation date**: ${creationDate}`,
@@ -125,7 +125,7 @@ export default class guildMemberAddEvent extends BaseEvent {
 		} else {
 			embed
 				.setColor("#DC5E55")
-				.setTitle("Member joined & kicked")
+				.setTitle("Member joined & kicked: " + member.user.tag)
 				.setDescription([
 					`> 👤 | **User**: ${member.toString()}`,
 					`> 📆 | **Creation date**: ${creationDate}`,
