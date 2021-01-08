@@ -35,14 +35,20 @@ export default class MessageEvent extends BaseEvent {
 			if (
 				capAbuse &&
 				message.content.length > 10 &&
-				!message.member.hasPermission("MANAGE_GUILD")
+				!message.member.hasPermission("MANAGE_GUILD", {
+					checkAdmin: true,
+					checkOwner: true,
+				})
 			)
 				return message.channel.send(
 					`> ❗ | Hey, ${message.author.toString()}. Do not cap abuse please, if you continue you might face a warning or mute.`
 				);
 			if (
 				filtered &&
-				!message.member.hasPermission("MANAGE_GUILD") &&
+				!message.member.hasPermission("MANAGE_GUILD", {
+					checkAdmin: true,
+					checkOwner: true,
+				}) &&
 				!ignoreBlacklistWord.includes(message.channel.id)
 			)
 				return (
@@ -53,7 +59,13 @@ export default class MessageEvent extends BaseEvent {
 						client
 					) && message.delete()
 				);
-			if (message.mentions.members.size > 5)
+			if (
+				message.mentions.members.size > 5 &&
+				!message.member.hasPermission("MANAGE_GUILD", {
+					checkAdmin: true,
+					checkOwner: true,
+				})
+			)
 				return (
 					this.warn(
 						message.content,
