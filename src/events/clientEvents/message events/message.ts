@@ -29,6 +29,21 @@ export default class MessageEvent extends BaseEvent {
 		];
 
 		const filtered = this.filter(message.content.toLowerCase());
+		const capAbuse = this.caps(message.content);
+
+		if (
+			capAbuse &&
+			message.guild &&
+			!message.member.hasPermission("MANAGE_GUILD")
+		)
+			return (
+				this.warn(
+					message.content,
+					"Automatic warning after reaching 75%+ caps in a message",
+					message.member,
+					client
+				) && message.delete()
+			);
 		if (
 			filtered &&
 			message.guild &&
@@ -158,6 +173,20 @@ export default class MessageEvent extends BaseEvent {
 
 			client.emit("warnEvent", message.member, client.user, caseId, reason);
 		}
+	}
+
+	caps(content: string): boolean {
+		if (content === content.toUpperCase()) return true;
+
+		let uppercase: number = 0;
+		const char = content
+			.trim()
+			.split("")
+			.filter((str) => /^[a-zA-Z]/.test(str));
+		char.forEach((str) => (uppercase += str === str.toUpperCase() ? 1 : 0));
+
+		if ((char.length / 100) * 75 <= uppercase) return true;
+		return false;
 	}
 }
 
