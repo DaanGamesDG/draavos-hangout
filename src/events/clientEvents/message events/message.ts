@@ -31,29 +31,42 @@ export default class MessageEvent extends BaseEvent {
 		const filtered = this.filter(message.content.toLowerCase());
 		const capAbuse = this.caps(message.content);
 
-		if (
-			capAbuse &&
-			message.guild &&
-			message.content.length > 10 &&
-			!message.member.hasPermission("MANAGE_GUILD")
-		)
-			return message.channel.send(
-				`> ❗ | Hey, ${message.author.toString()}. Do not cap abuse please, if you continue you might face a warning or mute.`
-			);
-		if (
-			filtered &&
-			message.guild &&
-			!message.member.hasPermission("MANAGE_GUILD") &&
-			!ignoreBlacklistWord.includes(message.channel.id)
-		)
-			return (
-				this.warn(
-					message.content,
-					`Automatic warning for using a blacklisted word (${filtered})`,
-					message.member,
-					client
-				) && message.delete()
-			);
+		if (message.guild) {
+			if (
+				capAbuse &&
+				message.content.length > 10 &&
+				!message.member.hasPermission("MANAGE_GUILD")
+			)
+				return message.channel.send(
+					`> ❗ | Hey, ${message.author.toString()}. Do not cap abuse please, if you continue you might face a warning or mute.`
+				);
+			if (
+				filtered &&
+				!message.member.hasPermission("MANAGE_GUILD") &&
+				!ignoreBlacklistWord.includes(message.channel.id)
+			)
+				return (
+					this.warn(
+						message.content,
+						`Automatic warning for using a blacklisted word (${filtered})`,
+						message.member,
+						client
+					) && message.delete()
+				);
+			if (message.mentions.members.size > 5)
+				return (
+					this.warn(
+						message.content,
+						`Automatic action carried out for spamming mentions (${message.mentions.members.size} mentions)`,
+						message.member,
+						client
+					) &&
+					message.delete() &&
+					message.channel.send(
+						`> 🔔 | ${message.author.toString()}, you aren't allowed to mass mention people. The limit is 5 per message!`
+					)
+				);
+		}
 
 		if (
 			message.member &&
