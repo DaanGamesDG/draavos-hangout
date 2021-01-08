@@ -31,18 +31,30 @@ export default class MessageEvent extends BaseEvent {
 		const filtered = this.filter(message.content.toLowerCase());
 		const capAbuse = this.caps(message.content);
 
-		if (message.guild) {
+		if (
+			message.guild &&
+			!message.member.hasPermission("MANAGE_GUILD", {
+				checkAdmin: true,
+				checkOwner: true,
+			})
+		) {
 			if (
 				capAbuse &&
 				message.content.length > 10 &&
-				!message.member.hasPermission("MANAGE_GUILD")
+				!message.member.hasPermission("MANAGE_GUILD", {
+					checkAdmin: true,
+					checkOwner: true,
+				})
 			)
 				return message.channel.send(
 					`> ❗ | Hey, ${message.author.toString()}. Do not cap abuse please, if you continue you might face a warning or mute.`
 				);
 			if (
 				filtered &&
-				!message.member.hasPermission("MANAGE_GUILD") &&
+				!message.member.hasPermission("MANAGE_GUILD", {
+					checkAdmin: true,
+					checkOwner: true,
+				}) &&
 				!ignoreBlacklistWord.includes(message.channel.id)
 			)
 				return (
@@ -53,11 +65,21 @@ export default class MessageEvent extends BaseEvent {
 						client
 					) && message.delete()
 				);
-			if (message.mentions.members.size > 5)
+			if (
+				message.mentions.members.filter((m) => m.id !== message.author.id)
+					.size > 5 &&
+				!message.member.hasPermission("MANAGE_GUILD", {
+					checkAdmin: true,
+					checkOwner: true,
+				})
+			)
 				return (
 					this.warn(
 						message.content,
-						`Automatic action carried out for spamming mentions (${message.mentions.members.size} mentions)`,
+						`Automatic action carried out for spamming mentions (${
+							message.mentions.members.filter((m) => m.id !== message.author.id)
+								.size
+						} mentions)`,
 						message.member,
 						client
 					) &&
@@ -192,6 +214,8 @@ export default class MessageEvent extends BaseEvent {
 			.trim()
 			.split("")
 			.filter((str) => /^[a-zA-Z]/.test(str));
+
+		if (char.length <= 0) return false;
 		char.forEach((str) => (uppercase += str === str.toUpperCase() ? 1 : 0));
 
 		if ((char.length / 100) * 75 <= uppercase) return true;
