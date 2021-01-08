@@ -31,7 +31,13 @@ export default class MessageEvent extends BaseEvent {
 		const filtered = this.filter(message.content.toLowerCase());
 		const capAbuse = this.caps(message.content);
 
-		if (message.guild) {
+		if (
+			message.guild &&
+			!message.member.hasPermission("MANAGE_GUILD", {
+				checkAdmin: true,
+				checkOwner: true,
+			})
+		) {
 			if (
 				capAbuse &&
 				message.content.length > 10 &&
@@ -208,6 +214,8 @@ export default class MessageEvent extends BaseEvent {
 			.trim()
 			.split("")
 			.filter((str) => /^[a-zA-Z]/.test(str));
+
+		if (char.length <= 0) return false;
 		char.forEach((str) => (uppercase += str === str.toUpperCase() ? 1 : 0));
 
 		if ((char.length / 100) * 75 <= uppercase) return true;
