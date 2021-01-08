@@ -34,6 +34,7 @@ export default class MessageEvent extends BaseEvent {
 		if (
 			capAbuse &&
 			message.guild &&
+			message.content.length > 10 &&
 			!message.member.hasPermission("MANAGE_GUILD")
 		)
 			return (
