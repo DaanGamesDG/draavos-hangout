@@ -60,7 +60,8 @@ export default class MessageEvent extends BaseEvent {
 					) && message.delete()
 				);
 			if (
-				message.mentions.members.size > 5 &&
+				message.mentions.members.filter((m) => m.id !== message.author.id)
+					.size > 5 &&
 				!message.member.hasPermission("MANAGE_GUILD", {
 					checkAdmin: true,
 					checkOwner: true,
@@ -69,7 +70,10 @@ export default class MessageEvent extends BaseEvent {
 				return (
 					this.warn(
 						message.content,
-						`Automatic action carried out for spamming mentions (${message.mentions.members.size} mentions)`,
+						`Automatic action carried out for spamming mentions (${
+							message.mentions.members.filter((m) => m.id !== message.author.id)
+								.size
+						} mentions)`,
 						message.member,
 						client
 					) &&
