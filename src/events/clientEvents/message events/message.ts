@@ -37,13 +37,8 @@ export default class MessageEvent extends BaseEvent {
 			message.content.length > 10 &&
 			!message.member.hasPermission("MANAGE_GUILD")
 		)
-			return (
-				this.warn(
-					message.content,
-					"Automatic warning after reaching 75%+ caps in a message",
-					message.member,
-					client
-				) && message.delete()
+			return message.channel.send(
+				`> ❗ | Hey, ${message.author.toString()}. Do not cap abuse please, if you continue you might face a warning or mute.`
 			);
 		if (
 			filtered &&
