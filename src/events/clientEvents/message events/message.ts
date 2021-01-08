@@ -38,14 +38,7 @@ export default class MessageEvent extends BaseEvent {
 				checkOwner: true,
 			})
 		) {
-			if (
-				capAbuse &&
-				message.content.length > 10 &&
-				!message.member.hasPermission("MANAGE_GUILD", {
-					checkAdmin: true,
-					checkOwner: true,
-				})
-			)
+			if (capAbuse && message.content.length > 10)
 				return message.channel.send(
 					`> ❗ | Hey, ${message.author.toString()}. Do not cap abuse please, if you continue you might face a warning or mute.`
 				);
@@ -67,11 +60,7 @@ export default class MessageEvent extends BaseEvent {
 				);
 			if (
 				message.mentions.members.filter((m) => m.id !== message.author.id)
-					.size > 5 &&
-				!message.member.hasPermission("MANAGE_GUILD", {
-					checkAdmin: true,
-					checkOwner: true,
-				})
+					.size > 5
 			)
 				return (
 					this.warn(
@@ -91,11 +80,6 @@ export default class MessageEvent extends BaseEvent {
 		}
 
 		if (
-			message.member &&
-			!message.member.hasPermission("MANAGE_GUILD", {
-				checkAdmin: true,
-				checkOwner: true,
-			}) &&
 			!["794256807337263114", "710090914776743966"].includes(message.channel.id)
 		)
 			this.spamFilter(client, message);
@@ -207,8 +191,6 @@ export default class MessageEvent extends BaseEvent {
 	}
 
 	caps(content: string): boolean {
-		if (content === content.toUpperCase()) return true;
-
 		let uppercase: number = 0;
 		const char = content
 			.trim()
@@ -216,6 +198,8 @@ export default class MessageEvent extends BaseEvent {
 			.filter((str) => /^[a-zA-Z]/.test(str));
 
 		if (char.length <= 0) return false;
+		if (content === content.toUpperCase()) return true;
+
 		char.forEach((str) => (uppercase += str === str.toUpperCase() ? 1 : 0));
 
 		if ((char.length / 100) * 75 <= uppercase) return true;
