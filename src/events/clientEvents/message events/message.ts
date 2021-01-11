@@ -42,14 +42,7 @@ export default class MessageEvent extends BaseEvent {
 				return message.channel.send(
 					`> ❗ | Hey, ${message.author.toString()}. Do not cap abuse please, if you continue you might face a warning or mute.`
 				);
-			if (
-				filtered &&
-				!message.member.hasPermission("MANAGE_GUILD", {
-					checkAdmin: true,
-					checkOwner: true,
-				}) &&
-				!ignoreBlacklistWord.includes(message.channel.id)
-			)
+			if (filtered && !ignoreBlacklistWord.includes(message.channel.id))
 				return (
 					this.warn(
 						message.content,
@@ -77,12 +70,14 @@ export default class MessageEvent extends BaseEvent {
 						`> 🔔 | ${message.author.toString()}, you aren't allowed to mass mention people. The limit is 5 per message!`
 					)
 				);
-		}
 
-		if (
-			!["794256807337263114", "710090914776743966"].includes(message.channel.id)
-		)
-			this.spamFilter(client, message);
+			if (
+				!["794256807337263114", "710090914776743966"].includes(
+					message.channel.id
+				)
+			)
+				this.spamFilter(client, message);
+		}
 
 		if (message.content.startsWith(prefix)) {
 			const [cmdName, ...cmdArgs] = message.content
