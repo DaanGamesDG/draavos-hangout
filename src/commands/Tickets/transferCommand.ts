@@ -39,10 +39,7 @@ export default class PingCommand extends BaseCommand {
 				`>>> 👮‍♂️ | Sorry, you can not transfer someone elses ticket unless you have the "Manage Server" permissions.`
 			);
 
-		const data = await ticketsSchema.findOneAndUpdate(
-			{ claimer: message.author.id },
-			{ claimer: member.id }
-		);
+		const data = await ticketsSchema.findOneAndUpdate({ claimer }, { claimer: member.id });
 		message.channel.setTopic(
 			`${member.id}|Do not edit this channel, doing so might result in a broken ticket!`
 		);
@@ -51,7 +48,7 @@ export default class PingCommand extends BaseCommand {
 			SEND_MESSAGES: true,
 			VIEW_CHANNEL: true,
 		});
-		message.channel.updateOverwrite(message.author, {
+		message.channel.updateOverwrite(claimer, {
 			VIEW_CHANNEL: false,
 		});
 
