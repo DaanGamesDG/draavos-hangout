@@ -23,13 +23,20 @@ export default class PingCommand extends BaseCommand {
 		message.channel = message.channel as TextChannel;
 		if (!message.channel.name.endsWith("-ticket")) return;
 
-		if (!member)
-			return message.channel.send(
-				`> 🔎 | I didn't find a user called "${args[0]}".`
-			);
-		if (member.id === message.author.id)
+		if (!member) return message.channel.send(`> 🔎 | I didn't find a user called "${args[0]}".`);
+
+		const claimer = message.channel.topic.split(/\|/g).shift();
+		if (member.id === claimer)
 			return message.channel.send(
 				"> ❓ | Why do you to transfer it yourself?! You are already ticket claimer."
+			);
+		if (
+			message.author.id !== claimer &&
+			(!message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true }) ||
+				message.author.id !== message.guild.ownerID)
+		)
+			return message.channel.send(
+				`>>> 👮‍♂️ | Sorry, you can not transfer someone elses ticket unless you have the "Manage Server" permissions.`
 			);
 
 		const data = await ticketsSchema.findOneAndUpdate(
@@ -52,8 +59,6 @@ export default class PingCommand extends BaseCommand {
 			client.users.cache.get(data.get("id")) ||
 			(await client.users.fetch(data.get("id")).catch((e) => null));
 		if (user)
-			user
-				.send(`> 📨 | Your ticket is transferred to ${member.toString()}.`)
-				.catch((e) => null);
+			user.send(`> 📨 | Your ticket is transferred to ${member.toString()}.`).catch((e) => null);
 	}
 }
