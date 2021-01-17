@@ -32,8 +32,7 @@ export default class PingCommand extends BaseCommand {
 			);
 		if (
 			message.author.id !== claimer &&
-			(!message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true }) ||
-				message.author.id !== message.guild.ownerID)
+			!message.member.hasPermission("MANAGE_GUILD", { checkAdmin: true, checkOwner: true })
 		)
 			return message.channel.send(
 				`>>> 👮‍♂️ | Sorry, you can not transfer someone elses ticket unless you have the "Manage Server" permissions.`
