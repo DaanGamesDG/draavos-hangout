@@ -16,17 +16,11 @@ export default class MessageEvent extends BaseEvent {
 
 	async run(client: DiscordClient, message: Message) {
 		if (message.author.bot) return;
-		if (
-			message.channel.type == "dm" ||
-			message.channel.name.endsWith("-ticket")
-		)
+		if (message.channel.type == "dm" || message.channel.name.endsWith("-ticket"))
 			return client.emit("ticketChat", message);
 
 		const prefix = process.env.DISCORD_BOT_PREFIX;
-		const mentionPrefixes: string[] = [
-			`<@${client.user.id}>`,
-			`<@!${client.user.id}>`,
-		];
+		const mentionPrefixes: string[] = [`<@${client.user.id}>`, `<@!${client.user.id}>`];
 
 		const filtered = this.filter(message.content.toLowerCase());
 		const capAbuse = this.caps(message.content);
@@ -39,28 +33,25 @@ export default class MessageEvent extends BaseEvent {
 			})
 		) {
 			if (capAbuse && message.content.length > 10)
-				return message.channel.send(
-					`> ❗ | Hey, ${message.author.toString()}. Do not cap abuse please, if you continue you might face a warning or mute.`
-				);
+				return message.channel.send(`> ❗ | Hey, ${message.author.toString()}, too many caps!`);
 			if (filtered && !ignoreBlacklistWord.includes(message.channel.id))
-				return (
-					this.warn(
-						message.content,
-						`Automatic warning for using a blacklisted word (${filtered})`,
-						message.member,
-						client
-					) && message.delete()
+				message.channel.send(
+					`>>> | ${message.author.toString()}, swearing is only allowed in <#723665469894164580>!`
 				);
-			if (
-				message.mentions.members.filter((m) => m.id !== message.author.id)
-					.size > 5
-			)
+			return (
+				this.warn(
+					message.content,
+					`Automatic warning for using a blacklisted word (${filtered})`,
+					message.member,
+					client
+				) && message.delete()
+			);
+			if (message.mentions.members.filter((m) => m.id !== message.author.id).size > 5)
 				return (
 					this.warn(
 						message.content,
 						`Automatic action carried out for spamming mentions (${
-							message.mentions.members.filter((m) => m.id !== message.author.id)
-								.size
+							message.mentions.members.filter((m) => m.id !== message.author.id).size
 						} mentions)`,
 						message.member,
 						client
@@ -71,19 +62,12 @@ export default class MessageEvent extends BaseEvent {
 					)
 				);
 
-			if (
-				!["794256807337263114", "710090914776743966"].includes(
-					message.channel.id
-				)
-			)
+			if (!["794256807337263114", "710090914776743966"].includes(message.channel.id))
 				this.spamFilter(client, message);
 		}
 
 		if (message.content.startsWith(prefix)) {
-			const [cmdName, ...cmdArgs] = message.content
-				.slice(prefix.length)
-				.trim()
-				.split(/\s+/);
+			const [cmdName, ...cmdArgs] = message.content.slice(prefix.length).trim().split(/\s+/);
 
 			return commandHandler(client, message, cmdName, cmdArgs);
 		} else if (message.content.startsWith(mentionPrefixes[0])) {
@@ -110,22 +94,13 @@ export default class MessageEvent extends BaseEvent {
 
 		str
 			.split(/\s+/)
-			.forEach((word) =>
-				blacklisted.forEach((w) => (blWord = word.includes(w) ? w : blWord))
-			);
+			.forEach((word) => blacklisted.forEach((w) => (blWord = word.includes(w) ? w : blWord)));
 
 		return blWord;
 	}
 
-	async warn(
-		str: string,
-		reason: string,
-		user: GuildMember,
-		client: DiscordClient
-	) {
-		const caseId = `#${
-			(await warnSchema.find({ guildId: user.guild.id })).length + 1
-		}`;
+	async warn(str: string, reason: string, user: GuildMember, client: DiscordClient) {
+		const caseId = `#${(await warnSchema.find({ guildId: user.guild.id })).length + 1}`;
 		await new warnSchema({
 			id: user.id,
 			guildId: user.guild.id,
@@ -158,11 +133,8 @@ export default class MessageEvent extends BaseEvent {
 		if (spamfilter.get(message.author.id) > 7) {
 			spamfilter.delete(message.author.id);
 
-			const reason =
-				"Automatic action carried out for hitting the message rate limit (7/5s)";
-			const caseId = `#${
-				(await warnSchema.find({ guildId: message.guild.id })).length + 1
-			}`;
+			const reason = "Automatic action carried out for hitting the message rate limit (7/5s)";
+			const caseId = `#${(await warnSchema.find({ guildId: message.guild.id })).length + 1}`;
 			await new warnSchema({
 				id: message.author.id,
 				guildId: message.guild.id,
@@ -175,13 +147,16 @@ export default class MessageEvent extends BaseEvent {
 				.catch((e) => console.log(e));
 
 			message.author
-				.send(
-					`> 🧾 | **Automatic warn - Draavo's Hangout**\n> 📃 | Reason: **${reason}**`,
-					{ split: true }
-				)
+				.send(`> 🧾 | **Automatic warn - Draavo's Hangout**\n> 📃 | Reason: **${reason}**`, {
+					split: true,
+				})
 				.catch((e) => null);
 
 			client.emit("warnEvent", message.member, client.user, caseId, reason);
+
+			message.channel.send(
+				`>>> ❗ | ${message.author.toString()}, don't spam. You can only spam in <#710090914776743966>!`
+			);
 		}
 	}
 
@@ -210,9 +185,7 @@ function commandHandler(
 ): Promise<Message> {
 	const ignoredChannels = [];
 	const command = client.commands.get(cmdName);
-	const channel: TextChannel | NewsChannel = message.channel as
-		| TextChannel
-		| NewsChannel;
+	const channel: TextChannel | NewsChannel = message.channel as TextChannel | NewsChannel;
 	if (command) {
 		const options = command.options;
 		if (message.channel.type === "dm" && options.channelType == "guild") return;
@@ -240,10 +213,8 @@ function commandHandler(
 
 			if (
 				options.clientPermissions &&
-				(channel.permissionsFor(client.user).missing(options.clientPermissions)
-					.length ||
-					message.guild.me.permissions.missing(options.clientPermissions)
-						.length)
+				(channel.permissionsFor(client.user).missing(options.clientPermissions).length ||
+					message.guild.me.permissions.missing(options.clientPermissions).length)
 			) {
 				const missing = client.utils.missingPerms(
 					message.guild.me,
@@ -258,15 +229,10 @@ function commandHandler(
 			}
 			if (
 				options.userPermissions &&
-				(channel.permissionsFor(message.member).missing(options.userPermissions)
-					.length ||
+				(channel.permissionsFor(message.member).missing(options.userPermissions).length ||
 					message.member.permissions.missing(options.userPermissions).length)
 			) {
-				const missing = client.utils.missingPerms(
-					message.member,
-					channel,
-					options.userPermissions
-				);
+				const missing = client.utils.missingPerms(message.member, channel, options.userPermissions);
 				return message.channel.send(
 					`> ${client.utils
 						.EmojiFinder("redtick")
@@ -289,8 +255,7 @@ function commandHandler(
 				);
 		}
 
-		if (client.owners.includes(message.author.id))
-			return command.run(client, message, cmdArgs);
+		if (client.owners.includes(message.author.id)) return command.run(client, message, cmdArgs);
 
 		if (options.timeout) {
 			const timeout = timeouts.get(message.author.id + `-` + command.name);
@@ -298,17 +263,13 @@ function commandHandler(
 				const l = Date.now() - timeout;
 				const left = options.timeout - l;
 				return message.channel.send(
-					`> ⏲️ | Take a break, you are going to fast! Try again after \`${ms(
-						left,
-						{ long: true }
-					)}\`.`
+					`> ⏲️ | Take a break, you are going to fast! Try again after \`${ms(left, {
+						long: true,
+					})}\`.`
 				);
 			} else {
 				timeouts.set(message.author.id + `-` + command.name, Date.now());
-				setTimeout(
-					() => timeouts.delete(message.author.id + `-` + command.name),
-					options.timeout
-				);
+				setTimeout(() => timeouts.delete(message.author.id + `-` + command.name), options.timeout);
 			}
 		}
 
