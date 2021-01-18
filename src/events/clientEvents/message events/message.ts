@@ -34,18 +34,19 @@ export default class MessageEvent extends BaseEvent {
 		) {
 			if (capAbuse && message.content.length > 10)
 				return message.channel.send(`> ❗ | Hey, ${message.author.toString()}, too many caps!`);
-			if (filtered && !ignoreBlacklistWord.includes(message.channel.id))
+			if (filtered && !ignoreBlacklistWord.includes(message.channel.id)) {
 				message.channel.send(
 					`>>> | ${message.author.toString()}, swearing is only allowed in <#723665469894164580>!`
 				);
-			return (
-				this.warn(
-					message.content,
-					`Automatic warning for using a blacklisted word (${filtered})`,
-					message.member,
-					client
-				) && message.delete()
-			);
+				return (
+					this.warn(
+						message.content,
+						`Automatic warning for using a blacklisted word (${filtered})`,
+						message.member,
+						client
+					) && message.delete()
+				);
+			}
 			if (message.mentions.members.filter((m) => m.id !== message.author.id).size > 5)
 				return (
 					this.warn(
