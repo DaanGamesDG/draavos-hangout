@@ -4,6 +4,7 @@ import { modlog, muteRole } from "../../../../config";
 import { GuildMember, MessageEmbed, TextChannel, User } from "discord.js";
 import { warnSchema } from "../../../utils/database/warn";
 import { muteSchema } from "../../../utils/database/mute";
+import ms from "ms";
 
 export default class warnEvent extends BaseEvent {
 	constructor() {
@@ -46,6 +47,13 @@ export default class warnEvent extends BaseEvent {
 			setTimeout(() => {
 				member.roles.remove(muteRole);
 				schema.delete();
+				client.emit(
+					"muteEvent",
+					"unmute",
+					member,
+					client.user,
+					`automatic unmute from mute made ${ms(6e5)} ago by ${client.user.tag}`
+				);
 			}, 6e5);
 
 			client.emit("muteEvent", "mute", member, client.user, r, 6e5);
