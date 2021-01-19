@@ -66,6 +66,8 @@ export default class MessageEvent extends BaseEvent {
 			if (!["794256807337263114", "710090914776743966"].includes(message.channel.id))
 				this.spamFilter(client, message);
 		}
+		if (message.channel.id === /* "720986432176652369" */ "792005203867729921")
+			return this.advertise(client, message);
 
 		if (message.content.startsWith(prefix)) {
 			const [cmdName, ...cmdArgs] = message.content.slice(prefix.length).trim().split(/\s+/);
@@ -175,6 +177,23 @@ export default class MessageEvent extends BaseEvent {
 
 		if ((char.length / 100) * 75 <= uppercase) return true;
 		return false;
+	}
+
+	advertise(client: DiscordClient, message: Message) {
+		const content = message.content.trim().split(/\s+/);
+		const links = content.filter((str) => str.match(/https?:\/\/(www.)?/g));
+		const discord = content.filter((str) =>
+			str.match(/((?:https?:)?\/\/)?((?:www|m)\.)?((?:discord\.gg|discordapp\.com\/invite))/g)
+		);
+
+		if (links.length + discord.length <= 1) return;
+
+		message.channel.send(
+			`>>> ${client.utils
+				.EmojiFinder("checkpins")
+				.toString()} | Hey, you can only add one link per message! Please check the pins for more info ${message.author.toString()}!`
+		);
+		message.delete();
 	}
 }
 
