@@ -23,7 +23,7 @@ export default class removeCommand extends BaseCommand {
 		if (!channel)
 			return message.channel.send(`>>> ❓ | I was unable to find a channel called "${args[0]}"!`);
 
-		const msg = await channel.messages.fetch(args[1]);
+		const msg: Message = await channel.messages.fetch(args[1]).catch((e) => null);
 		const reason = args.slice(2).join(" ") || "No reason given";
 
 		if (!msg)
@@ -36,6 +36,10 @@ export default class removeCommand extends BaseCommand {
 				split: true,
 			})
 			.catch((e) => (DMed = false));
+
+		msg.delete().catch((e) => {
+			return message.channel.send(`Error: ${e}`);
+		});
 
 		return message.channel.send(
 			`> 🧾 | Successfully removed the message of **${msg.author.tag}** for **${reason}**. ${
