@@ -3,7 +3,8 @@ import BaseCommand from "../../utils/structures/baseCommand";
 import DiscordClient from "../../client/client";
 
 const files: string[] = [
-	"https://cdn.discordapp.com/attachments/571619638182674442/728709803165351955/uwu.mp4",
+	"https://cdn.discordapp.com/attachments/727992822036430859/799944907333828628/UwU_Violation.mp4",
+	//"https://cdn.discordapp.com/attachments/571619638182674442/728709803165351955/uwu.mp4",
 	"https://cdn.discordapp.com/attachments/563724345478742018/728714872719671337/unknown.png",
 	"https://cdn.discordapp.com/attachments/571619638182674442/728714181678989433/unknown.png",
 	"uwu rawr xD nuzzles",
@@ -40,8 +41,6 @@ export default class owofyCommand extends BaseCommand {
 			);
 
 		const file = files[Math.floor(Math.random() * files.length)];
-		return message.channel.send(
-			`> ${client.utils.EmojiFinder("meow_uwu")} | Uwu, ` + file
-		);
+		return message.channel.send(`> ${client.utils.EmojiFinder("meow_uwu")} | Uwu, ` + file);
 	}
 }
