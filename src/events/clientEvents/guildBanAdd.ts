@@ -1,7 +1,7 @@
 import BaseEvent from "../../utils/structures/baseEvent";
 import DiscordClient from "../../client/client";
 import { tempbanSchema } from "../../utils/database/tempban";
-import { modlog } from "../../../config";
+import { modlog, systemLogPublic } from "../../../config";
 import { Guild, MessageEmbed, TextChannel, User } from "discord.js";
 import ms from "ms";
 
@@ -22,9 +22,7 @@ export default class MessageEvent extends BaseEvent {
 		let { reason, executor } = ban;
 
 		if (executor.id === client.user.id) {
-			reason.split(/\|/g)[1].toLowerCase() === "tempban"
-				? (type = "Tempban")
-				: (type = "Ban");
+			reason.split(/\|/g)[1].toLowerCase() === "tempban" ? (type = "Tempban") : (type = "Ban");
 			const moderator =
 				client.users.cache.get(reason.split(/\|/g)[0]) ||
 				(await client.users.fetch(reason.split(/\|/g)[0]));
@@ -51,9 +49,7 @@ export default class MessageEvent extends BaseEvent {
 				.setDescription([
 					`> 👤 | Offender: ${user.tag} - ${user.toString()}`,
 					`> 📃 | Reason: **${reason.substr(0, 800)}**`,
-					type === "Tempban"
-						? `> ⌚ | Duration: ${ms(duration, { long: true })}`
-						: "",
+					type === "Tempban" ? `> ⌚ | Duration: ${ms(duration, { long: true })}` : "",
 				]);
 
 			channel.send(embed);
@@ -76,5 +72,16 @@ export default class MessageEvent extends BaseEvent {
 
 			channel.send(embed);
 		}
+
+		const channel = (client.channels.cache.get(systemLogPublic) ||
+			(await client.channels.fetch(systemLogPublic))) as TextChannel;
+		channel.send(
+			new MessageEmbed()
+				.setAuthor("The ban hammer has come down!")
+				.setTitle(`${user.tag} has been banned!`)
+				.setDescription(`That is one big oof there, don't you think? 🔨`)
+				.setFooter(`There are now ${guild.memberCount} members in this server.`)
+				.setColor("BLACK")
+		);
 	}
 }
