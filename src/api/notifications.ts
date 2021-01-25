@@ -8,7 +8,7 @@ const webhookS = new WebhookClient(process.env.YTIDS, process.env.YTTOKENS);
 const links: string[] = [];
 
 const notifier = new YouTubeNotifier({
-	hubCallback: "https://draavos-hangout.herokuapp.com/yt",
+	hubCallback: "https://dh-assistant.herokuapp.com/yt",
 	secret: "very_cool_secret",
 });
 
@@ -18,10 +18,7 @@ notifier.on("notified", (data) => {
 
 	data.channel.id === "UCkMrp3dJhWz2FcGTzywQGWg"
 		? send(
-				DraavoMsg.replace(/{channelName}/g, data.channel.name).replace(
-					/{link}/g,
-					data.video.link
-				),
+				DraavoMsg.replace(/{channelName}/g, data.channel.name).replace(/{link}/g, data.video.link),
 				data.channel.id
 		  )
 		: send(
