@@ -43,8 +43,8 @@ app.listen(process.env.PORT, () =>
 	console.log("api online and listening to port " + process.env.PORT)
 );
 
-setTimeout(() => notifier.subscribe(channelIds), 7e3);
-setInterval(() => fetch("https://draavos-hangout.herokuapp.com/"), 6e5 * 10);
+setTimeout(() => notifier.subscribe(channelIds), 6e4 / 2);
+setInterval(() => fetch("https://dh-assistant.herokuapp.com/"), 6e5);
 
 function send(message: string, id: string) {
 	id === "UCkMrp3dJhWz2FcGTzywQGWg"
