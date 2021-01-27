@@ -15,9 +15,9 @@ export default class feedbackCommand extends BaseCommand {
 	}
 
 	async run(client: DiscordClient, message: Message, args: Array<string>) {
-		feedback.findOneAndUpdate(
+		await feedback.findOneAndUpdate(
 			{ guildId: message.guild.id },
-			{ id: args[0], guildId: message.guild.id },
+			{ message: typeof args[0] === "string" ? args[0] : "", guildId: message.guild.id },
 			{ upsert: true }
 		);
 		message.react("✅");
