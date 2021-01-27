@@ -111,14 +111,11 @@ export default class MessageEvent extends BaseEvent {
 	}
 
 	async nsfwFilter(message: Message) {
-		if (message.attachments.size === 0) return;
-
-		const img = message.attachments.first().attachment;
-
-		const model = await nsfwjs.load();
-
-		const predictions = await model.classify(img);
-		console.log("Predictions: ", predictions);
+		// if (message.attachments.size === 0) return;
+		// const img = message.attachments.first().attachment;
+		// const model = await nsfwjs.load();
+		// const predictions = await model.classify(img);
+		// console.log("Predictions: ", predictions);
 	}
 
 	async warn(str: string, reason: string, user: GuildMember, client: DiscordClient) {
