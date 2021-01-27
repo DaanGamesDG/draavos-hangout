@@ -5,7 +5,6 @@ import ms from "ms";
 import { blacklisted } from "../../../utils/database/filter";
 import { ignoreBlacklistWord } from "../../../../config";
 import { warnSchema } from "../../../utils/database/warn";
-import * as nsfwjs from "nsfwjs";
 
 const timeouts: Map<string, number> = new Map();
 const spamfilter: Map<string, filterObj> = new Map();
