@@ -13,14 +13,17 @@ export default class messageReactionAddEvent extends BaseEvent {
 		if (reaction.partial) reaction = await reaction.fetch();
 		if (reaction.message.partial) reaction.message = await reaction.message.fetch();
 		if (user.partial) user = await user.fetch();
+		if (!reaction.message.guild) return;
 
-		if (
-			!reaction.message.guild ||
-			reaction.message.id !==
-				(await feedback.findOne({ guildId: reaction.message.guild.id }).get("id")) ||
-			reaction.emoji.name !== "📋"
-		)
-			return;
+		// @ts-ignore
+		const id = (await feedback.findOne({ guildId: reaction.message.guild.id })).toObject().message;
+		if (reaction.message.id !== id || reaction.emoji.name !== "📋") return;
+		// return console.log(
+		// 	"wrong emoji",
+		// 	//@ts-ignore
+		// 	await (await feedback.findOne({ guildId: reaction.message.guild.id })).toObject().message,
+		// 	reaction.emoji.name === "📋"
+		// );
 
 		try {
 			const msg = await user.send(`> ⏳ | Searching for your feedback... please wait.`);
@@ -42,7 +45,7 @@ export default class messageReactionAddEvent extends BaseEvent {
 
 			return msg.edit(feedback);
 		} catch (e) {
-			return;
+			return console.log(e);
 		}
 	}
 }

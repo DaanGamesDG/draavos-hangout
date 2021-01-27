@@ -8,7 +8,7 @@ const reqString = {
 export const feedback = model(
 	"feedback",
 	new Schema({
-		id: reqString,
+		message: reqString,
 		guildId: reqString,
 	})
 );
