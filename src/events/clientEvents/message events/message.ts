@@ -5,6 +5,7 @@ import ms from "ms";
 import { blacklisted } from "../../../utils/database/filter";
 import { ignoreBlacklistWord } from "../../../../config";
 import { warnSchema } from "../../../utils/database/warn";
+import * as nsfwjs from "nsfwjs";
 
 const timeouts: Map<string, number> = new Map();
 const spamfilter: Map<string, filterObj> = new Map();
@@ -71,6 +72,8 @@ export default class MessageEvent extends BaseEvent {
 			if (!["794256807337263114", "710090914776743966"].includes(message.channel.id))
 				this.spamFilter(client, message);
 		}
+
+		await this.nsfwFilter(message);
 		if (message.channel.id === /* "720986432176652369" */ "792005203867729921")
 			return this.advertise(client, message);
 
@@ -105,6 +108,17 @@ export default class MessageEvent extends BaseEvent {
 			.forEach((word) => blacklisted.forEach((w) => (blWord = word.includes(w) ? w : blWord)));
 
 		return blWord;
+	}
+
+	async nsfwFilter(message: Message) {
+		if (message.attachments.size === 0) return;
+
+		const img = message.attachments.first().attachment;
+
+		const model = await nsfwjs.load();
+
+		const predictions = await model.classify(img);
+		console.log("Predictions: ", predictions);
 	}
 
 	async warn(str: string, reason: string, user: GuildMember, client: DiscordClient) {
